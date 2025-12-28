@@ -61,7 +61,7 @@
           rgba(0,0,0,.02) 4px
         ),
         /* Base color */
-        var(--bg);
+                  var(--bg);
       background-attachment: fixed;
       color:var(--text);
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
@@ -1112,7 +1112,7 @@
       backdrop-filter: blur(4px);
     }
     .overlay.show{ display:flex; }
-    .overlay.show .sheet{
+.overlay.show .sheet{
       transform: translateY(0);
       opacity:1;
     }

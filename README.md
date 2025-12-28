@@ -30,3 +30,4 @@ Trading bot user interface built with vanilla JavaScript, HTML, and CSS.
 
 
 
+
