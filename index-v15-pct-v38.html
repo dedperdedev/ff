@@ -1,0 +1,2731 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>UpFin Trading Bot — UI Demo</title>
+  <style>
+    :root{
+      /* Binance-ish palette (no logos, just taste in colors) */
+      --bg:#0B0E11;
+      --panel:#12161C;
+      --panel2:#161A22;
+      --card:#1E2329;
+      --card2:#14181F;
+      --border:#2B3139;
+      --text:#EAECEF;
+      --muted:#848E9C;
+      --accent:#F0B90B;
+      --accent2:#F8D12F;
+      --upGreen: var(--accent2);
+      --pnlGreen:#0ECB81;
+      --candleUp: var(--pnlGreen);
+      --good: var(--accent);
+      --lime: var(--accent);
+      --heroTop: rgba(240,185,11,.22);
+      --heroTop2: rgba(240,185,11,.10);
+      --bad:#F6465D;
+      --ma25:#E13CBB;
+      --ma99:#8B6BFF;
+      --grid: rgba(43,49,57,1);
+      --shadow: 0 10px 24px rgba(0,0,0,.45);
+      --r16:16px;
+      --r20:20px;
+      --r24:24px;
+      --gap:12px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --numFont: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background: radial-gradient(1200px 600px at 50% -10%, rgba(240,185,11,.16), transparent 55%),
+                  radial-gradient(900px 500px at 10% 15%, rgba(240,185,11,.10), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      letter-spacing:.1px;
+      overflow:hidden;
+    }
+
+    .app{
+      height:100%;
+      display:flex;
+      flex-direction:column;
+    }
+
+.ico{
+      width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;
+      color:inherit;
+    }
+    .ico svg{ width:20px;height:20px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+    /* Nicer digits (separate font just for numbers) */
+    .numFont,
+    .bigNum,
+    .balance,
+    .pnl-val,
+    .statcard .v,
+    .money,
+    .posAmt,
+    .posPill,
+    .depAmtInput{
+      font-family: var(--numFont);
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum" 1, "lnum" 1;
+    }
+
+    .content{
+      flex:1;
+      overflow:auto;
+      padding: calc(10px + var(--safe-top)) 14px calc(90px + var(--safe-bottom));
+      scrollbar-width: none;
+    }
+    .content::-webkit-scrollbar{ width:0; height:0; }
+
+    .topcard{
+      background: linear-gradient(180deg, rgba(240,185,11,.10), rgba(240,185,11,.04)) , var(--card2);
+      border:1px solid rgba(43,49,57,.85);
+      border-left:0;
+      border-right:0;
+      border-top:0;
+      border-radius: 0 0 var(--r24) var(--r24);
+      padding: 14px;
+      margin-left: -14px;
+      margin-right: -14px;
+      box-shadow: var(--shadow);
+    }
+/* Topcard (Variant 1): one main number, secondary lines, actions separated */
+    .tophead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .topheadL{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+    .topTitle{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:900;
+      letter-spacing:.1px;
+      white-space:nowrap;
+    }
+    .eyeBtn{
+      width:28px;height:28px;
+      border-radius:10px;
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.06);
+      display:flex;align-items:center;justify-content:center;
+      color:var(--muted);
+      cursor:pointer;
+      user-select:none;
+      transition: transform .08s ease, border-color .12s ease, background .12s ease, color .12s ease;
+      padding:0;
+    }
+    .eyeBtn:active{ transform: translateY(1px) scale(.98); }
+    .eyeBtn:hover{ border-color: rgba(240,185,11,.35); background: rgba(240,185,11,.06); color: var(--text); }
+
+    .bigValue{
+      margin-top: 10px;
+      display:flex;
+      align-items:baseline;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .bigNum{
+      font-size:44px;
+      font-weight:700;
+      letter-spacing:-1.0px;
+      line-height:1.05;
+    }
+    .bigUnit{
+      font-size:14px;
+      color: var(--text);
+      font-weight:1000;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      opacity:.95;
+      user-select:none;
+    }
+    .bigUnit .chev{ color: var(--muted); font-weight:1100; transform: translateY(-1px); }
+
+    .subBalance{
+      margin-top: 8px;
+      font-size:13px;
+      color: var(--muted);
+      font-weight:900;
+    }
+    .approx{
+      margin-top: 4px;
+      font-size:13px;
+      color: rgba(132,142,156,.95);
+      font-weight:800;
+    }
+
+    .row{ display:flex; gap: var(--gap); align-items:center; }
+    .between{ justify-content:space-between; }
+
+    .avatar{
+      width:34px;height:34px;border-radius:50%;
+      background:
+        radial-gradient(14px 14px at 30% 30%, rgba(255,255,255,.22), transparent 55%),
+        linear-gradient(135deg, rgba(240,185,11,.95), rgba(248,209,47,.65));
+      border:1px solid rgba(255,255,255,.12);
+      flex:0 0 auto;
+    }
+
+    .balance-block{ min-width:0; }
+    .label{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .balance{
+      font-size:44px;
+      font-weight:700;
+      line-height:1.05;
+      letter-spacing:-1.0px;
+      margin-top: 10px;
+    }
+    .subline{
+      display:flex; align-items:center; gap:8px;
+      font-size:12px;
+      color:var(--muted);
+      margin-top:6px;
+    }
+
+    .pnlrow{
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(43,49,57,.65);
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:13px;
+      line-height:1.2;
+      width:100%;
+    }
+    .pnl-label{
+      color: var(--muted);
+      font-weight:700;
+      white-space:nowrap;
+    }
+    .pnl-label .dotted{
+      border-bottom: 1px dashed rgba(132,142,156,.55);
+      padding-bottom:2px;
+    }
+    .pnl-val{
+      font-weight:900;
+      letter-spacing:-.1px;
+      display:flex;
+      gap:6px;
+      align-items:baseline;
+      min-width:0;
+    }
+    .pnl-val .pnl-pct{ font-weight:800; opacity:.92; }
+    .pnl-val.good{ color: var(--pnlGreen); }
+    .pnl-val.bad{ color: var(--bad); }
+    .pnl-arrow{
+      margin-left:auto;
+      color: var(--muted);
+      font-size:18px;
+      transform: translateY(-1px);
+      user-select:none;
+    }
+    .usdIcon{ color: var(--pnlGreen); font-weight:1000; }
+    .pill{
+      display:inline-flex;
+      gap:6px;
+      align-items:center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.06);
+      color: var(--muted);
+      font-weight:600;
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .iconbtn{
+      width:34px;height:34px;border-radius:12px;
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.07);
+      display:flex;align-items:center;justify-content:center;
+      color:var(--muted);
+      cursor:pointer;
+      user-select:none;
+      transition: transform .08s ease, border-color .12s ease, background .12s ease;
+    }
+    .iconbtn:active{ transform: translateY(1px) scale(.98); }
+    .iconbtn:hover{ border-color: rgba(240,185,11,.35); background: rgba(240,185,11,.06); color: var(--text); }
+
+    .btnrow{ margin-top: 12px; display:flex; gap:10px; }
+    .btn{
+      flex:1;
+      height:40px;
+      border-radius: 999px;
+      border:1px solid rgba(43,49,57,.9);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      font-weight:800;
+      font-size:14px;
+      display:flex; align-items:center; justify-content:center;
+      gap:10px;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .08s ease, filter .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .btn:active{ transform: translateY(1px) scale(.99); }
+    .btn.primary{
+      background: linear-gradient(180deg, var(--accent2), var(--accent));
+      border-color: rgba(240,185,11,.55);
+      color:#0B0E11;
+    }
+    .btn.primary:hover{ filter: brightness(1.02); }
+    .btn.ghost{
+      background: rgba(255,255,255,.03);
+    }
+    .btn.ghost:hover{ border-color: rgba(240,185,11,.35); background: rgba(240,185,11,.06); }
+
+    .section{ margin-top: 14px; }
+    .h2{
+      font-size:13px;
+      color: var(--muted);
+      margin: 6px 2px 10px;
+      font-weight:700;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap);
+    }
+    .statcard{
+      background: var(--card);
+      border:1px solid rgba(43,49,57,.85);
+      border-radius: var(--r20);
+      padding: 12px;
+      box-shadow: 0 10px 20px rgba(0,0,0,.25);
+      min-height: 74px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .statcard .k{ font-size:12px; color:var(--muted); font-weight:700; }
+    .statcard .v{
+      font-size:26px;
+      font-weight:900;
+      letter-spacing:-.6px;
+      display:flex; align-items:baseline; gap:8px;
+    }
+    .statcard .v .mini{ font-size:12px; color:var(--muted); font-weight:800; letter-spacing:0; }
+
+    .list{
+      background: rgba(255,255,255,.02);
+      border:1px solid rgba(43,49,57,.85);
+      border-radius: var(--r24);
+      overflow:hidden;
+      box-shadow: 0 12px 26px rgba(0,0,0,.28);
+    }
+    .item{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 12px 12px;
+      border-top: 1px solid rgba(43,49,57,.75);
+    }
+    .item:first-child{ border-top:0; }
+    .coin{
+      width:28px;height:28px;border-radius: 10px;
+      display:flex; align-items:center; justify-content:center;
+      background: rgba(240,185,11,.12);
+      border:1px solid rgba(240,185,11,.25);
+      color: var(--accent);
+      flex:0 0 auto;
+    }
+    .coin svg{ width:18px;height:18px; stroke:currentColor; fill:none; stroke-width:2; }
+    .item .main{
+      flex:1;
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .item .line1{
+      display:flex; align-items:center; justify-content:space-between; gap: 10px;
+      font-weight:900;
+      letter-spacing:-.2px;
+    }
+    .money{ font-size:18px; }
+    .meta{
+      display:flex; align-items:center; gap:8px;
+      color: var(--muted);
+      font-size:12px;
+      font-weight:700;
+    }
+    .badge{
+      font-weight:900;
+      font-size:12px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(43,49,57,.85);
+      background: rgba(255,255,255,.03);
+      white-space:nowrap;
+    }
+    .badge.good{ color: var(--good); border-color: rgba(240,185,11,.35); background: rgba(240,185,11,.08); }
+    .badge.bad{ color: var(--bad); border-color: rgba(246,70,93,.35); background: rgba(246,70,93,.08); }
+    .small-ico{
+      width:22px;height:22px;border-radius: 999px;
+      display:flex; align-items:center; justify-content:center;
+      border: 1px solid rgba(43,49,57,.85);
+      background: rgba(255,255,255,.02);
+      color: var(--muted);
+      flex: 0 0 auto;
+    }
+
+    .bigAction{
+      margin-top: 12px;
+      height: 46px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(240,185,11,.22), rgba(240,185,11,.10));
+      border:1px solid rgba(240,185,11,.35);
+      color: var(--accent2);
+      font-weight:900;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .08s ease, filter .12s ease;
+    }
+    .bigAction:active{ transform: translateY(1px) scale(.99); }
+
+    /* Create position hero (screenshot block) */
+    
+    .createHero{
+      border-radius: 28px;
+      border: 1px solid rgba(43,49,57,.85);
+      background:
+        radial-gradient(120% 150% at 50% 0%, var(--heroTop), rgba(240,185,11,0) 58%),
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.16)),
+        var(--card2);
+      box-shadow: 0 18px 40px rgba(0,0,0,.55);
+      overflow:hidden;
+      padding: 16px 14px 14px;
+      text-align:center;
+    }
+    .createHeroTop{ display:none; }
+    .createHeroTitle{
+      font-size: 18px;
+      font-weight: 950;
+      line-height: 1.15;
+      letter-spacing: -.25px;
+      margin: 2px auto 10px;
+      max-width: 340px;
+      color: rgba(234,236,239,.95);
+    }
+    .createHeroTitle .hi{ color: var(--lime); }
+    .createHeroArrow{
+      width: 34px; height: 20px;
+      margin: 0 auto 12px;
+      display:flex; align-items:center; justify-content:center;
+      color: rgba(234,236,239,.7);
+      opacity: .9;
+    }
+    .createHeroArrow svg{ width: 22px; height: 22px; }
+
+    .createHeroBtn{
+      margin: 0;
+      height: 64px;
+      border-radius: 22px;
+      border: none;
+      width: 100%;
+      background: var(--lime);
+      color: #0B0E11;
+      font-weight: 950;
+      font-size: 16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      user-select:none;
+      box-shadow: 0 16px 28px rgba(0,0,0,.38);
+      position: relative;
+      padding: 0 20px;
+      transition: transform .08s ease, filter .12s ease;
+    }
+    .createHeroBtn:active{ transform: translateY(1px) scale(.99); }
+    .createHeroBtn .bubble{
+      width: 34px; height: 34px;
+      border-radius: 999px;
+      background: #0B0E11;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.10);
+      position:absolute;
+      right: 18px;
+    }
+    .createHeroBtn .bubble svg{ width: 16px; height: 16px; color: var(--lime); }
+
+
+    /* Chart */
+    .chart{
+      background: linear-gradient(180deg, rgba(240,185,11,.10), rgba(255,255,255,.02)) , var(--card2);
+      border:1px solid rgba(43,49,57,.85);
+      border-radius: var(--r24);
+      padding: 12px;
+      box-shadow: var(--shadow);
+    }
+    .chart canvas{ width:100%; height:120px; display:block; }
+    .chart .chartLabels{
+      display:flex; justify-content:space-between; margin-top:8px;
+      font-size:11px; color: var(--muted); font-weight:700;
+      opacity:.9;
+    }
+
+    .tgood{ color: var(--good); }
+    .tbad{ color: var(--bad); }
+
+    /* Kline-like equity chart (virtual deposit) */
+    .klineCard{
+      background: linear-gradient(180deg, rgba(240,185,11,.08), rgba(255,255,255,.015)) , var(--card2);
+      border:1px solid rgba(43,49,57,.85);
+      border-radius: var(--r24);
+      padding: 12px;
+      box-shadow: var(--shadow);
+    }
+    .klineHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom: 8px;
+    }
+    .klineTitle{
+      font-size:13px;
+      font-weight:1000;
+      letter-spacing:.1px;
+    }
+    .klineSub{
+      margin-top: 4px;
+      font-size:11px;
+      color: var(--muted);
+      font-weight:800;
+    }
+    .klineLegend, .klineMA{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      font-size:11px;
+      color: var(--muted);
+      font-weight:800;
+      line-height:1.2;
+      margin-top: 6px;
+      user-select:none;
+    }
+    .klineLegend b, .klineMA b{ color: var(--text); font-weight:1000; }
+    .klineMA .ma7{ color: var(--accent2); }
+    .klineMA .ma25{ color: var(--ma25); }
+    .klineMA .ma99{ color: var(--ma99); }
+    .klineWrap{
+      margin-top: 10px;
+      border-radius: 18px;
+      overflow:hidden;
+      background: rgba(0,0,0,.14);
+      border:1px solid rgba(43,49,57,.75);
+    }
+    .klineWrap.compact{ margin-top: 6px; }
+
+    .klineCard canvas{ width:100%; height:190px; display:block; }
+    .klineCard .chartLabels{
+      display:flex;
+      justify-content:space-between;
+      margin-top:8px;
+      font-size:11px;
+      color: var(--muted);
+      font-weight:700;
+      opacity:.9;
+    }
+
+
+    /* Team cards */
+    .metrics{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap);
+      margin-top: 12px;
+    }
+    .metric{
+      background: var(--card);
+      border:1px solid rgba(43,49,57,.85);
+      border-radius: var(--r20);
+      padding: 12px;
+    }
+    .metric .k{ color: var(--muted); font-weight:800; font-size:12px; }
+    .metric .v{ font-weight:900; font-size:18px; margin-top:6px; letter-spacing:-.2px; }
+    .takeBtn{
+      margin-top: 12px;
+      height: 46px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, var(--accent2), var(--accent));
+      color:#0B0E11;
+      font-weight:1000;
+      display:flex; align-items:center; justify-content:center;
+      border:1px solid rgba(240,185,11,.6);
+      cursor:pointer;
+      user-select:none;
+    }
+
+    .refBox{
+      margin-top: 14px;
+      background: var(--card2);
+      border:1px solid rgba(43,49,57,.85);
+      border-radius: var(--r24);
+      padding: 12px;
+      box-shadow: 0 12px 26px rgba(0,0,0,.28);
+    }
+    .refBox .k{ font-size:13px; font-weight:900; margin-bottom:10px; }
+    .refRow{
+      display:flex; gap:10px; align-items:center;
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(43,49,57,.85);
+      border-radius: 14px;
+      padding: 10px 10px;
+    }
+    .refRow input{
+      flex:1; min-width:0;
+      background: transparent;
+      border:0;
+      outline:0;
+      color: var(--text);
+      font-weight:800;
+      font-size:12px;
+    }
+    .copybtn{
+      width:38px; height:34px;
+      border-radius: 12px;
+      border:1px solid rgba(43,49,57,.85);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer;
+      user-select:none;
+    }
+    .copybtn:hover{ border-color: rgba(240,185,11,.35); background: rgba(240,185,11,.06); color: var(--text); }
+    .invite{
+      margin-top: 10px;
+      height: 44px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(43,49,57,.85);
+      font-weight:900;
+      color: var(--text);
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer;
+      user-select:none;
+    }
+    .invite:hover{ border-color: rgba(240,185,11,.35); background: rgba(240,185,11,.06); }
+
+    .teamTop{
+      margin-top: 12px;
+      display:flex; gap: var(--gap);
+    }
+    .chip{
+      flex:1;
+      background: var(--card);
+      border:1px solid rgba(43,49,57,.85);
+      border-radius: var(--r20);
+      padding: 12px;
+      text-align:center;
+    }
+    .chip .num{ font-size:17px; font-weight:700; letter-spacing:-.2px; }
+    .chip .t{ font-size:12px; color: var(--muted); font-weight:800; margin-top:4px; }
+    .chip.active{ border-color: rgba(240,185,11,.35); background: linear-gradient(180deg, rgba(240,185,11,.10), rgba(255,255,255,.02)); }
+    .chip.inactive{ border-color: rgba(246,70,93,.35); background: linear-gradient(180deg, rgba(246,70,93,.08), rgba(255,255,255,.02)); }
+
+    .levelsHdr{
+      display:flex; align-items:center; justify-content:space-between;
+      margin-top: 14px;
+    }
+    .levelsHdr .t{ font-weight:1000; }
+    .levelsHdr .more{
+      color: var(--muted);
+      font-weight:900;
+      font-size:12px;
+    }
+
+    .levelGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap);
+      margin-top: 10px;
+    }
+    .level{
+      background: var(--card);
+      border:1px solid rgba(43,49,57,.85);
+      border-radius: var(--r24);
+      padding: 12px;
+      box-shadow: 0 12px 26px rgba(0,0,0,.20);
+    }
+    .level .top{
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .level .lvl{ font-weight:1000; font-size:18px; }
+    .level .people{
+      display:flex; align-items:center; gap:6px;
+      color: var(--muted);
+      font-weight:900;
+      font-size:12px;
+    }
+    .level .pct{
+      margin-top: 12px;
+      height: 34px;
+      border-radius: 14px;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:1000;
+      border:1px solid rgba(240,185,11,.35);
+      background: rgba(240,185,11,.10);
+      color: var(--accent2);
+    }
+
+    /* Bottom nav */
+    .nav{
+      position:fixed;
+      left:0; right:0;
+      bottom:0;
+      padding: 8px 10px calc(10px + var(--safe-bottom));
+      background: linear-gradient(to top, rgba(11,14,17,.98) 55%, rgba(11,14,17,.65) 100%);
+      border-top: 1px solid rgba(43,49,57,.65);
+      backdrop-filter: blur(10px);
+    }
+    .navrow{
+      max-width: 520px;
+      margin: 0 auto;
+      display:flex;
+      justify-content:space-between;
+      gap: 6px;
+    }
+    .tab{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+      padding: 8px 4px 6px;
+      border-radius: 14px;
+      color: var(--muted);
+      cursor:pointer;
+      user-select:none;
+      transition: background .12s ease, color .12s ease;
+      min-width: 0;
+    }
+    .tab .t{ font-size:11px; font-weight:900; }
+    .tab svg{ width:20px;height:20px; stroke:currentColor; fill:none; stroke-width:2; }
+    .tab.active{
+      color: var(--accent2);
+      background: rgba(240,185,11,.08);
+      border: 1px solid rgba(240,185,11,.22);
+    }
+    .tab:active{ transform: translateY(1px); }
+
+    /* Modal */
+    .overlay{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      padding: 14px 14px calc(14px + var(--safe-bottom));
+      z-index: 50;
+    }
+    .overlay.show{ display:flex; }
+.overlay.show .sheet{
+      transform: translateY(0);
+      opacity:1;
+    }
+    .overlay.closing .sheet{
+      transform: translateY(18px);
+      opacity:0;
+    }
+    .sheet{
+      width:100%;
+      max-width: 520px;
+      background: linear-gradient(180deg, rgba(240,185,11,.08), rgba(255,255,255,.02)), var(--panel);
+      border:1px solid rgba(43,49,57,.85);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+          transform: translateY(18px);
+      opacity:0;
+      transition: transform .18s ease, opacity .18s ease;
+    }
+    .sheetHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 12px 12px;
+      border-bottom: 1px solid rgba(43,49,57,.65);
+    }
+    .sheetHeader .title{ font-weight:1000; font-size:14px; }
+    .sheetHeader .close{
+      width:34px;height:34px;border-radius: 12px;
+      display:flex; align-items:center; justify-content:center;
+      border:1px solid rgba(43,49,57,.85);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      cursor:pointer;
+      user-select:none;
+    }
+    .sheetBody{ padding: 12px; }
+
+    /* Modal variants */
+    .sheet.fullscreen{
+      border-radius: 28px;
+      max-height: calc(100vh - 28px - var(--safe-bottom));
+    }
+    .sheet.fullscreen .sheetHeader{ display:none; }
+    .sheet.fullscreen .sheetBody{ padding:0; }
+    .hintCard{
+      background: rgba(240,185,11,.10);
+      border:1px solid rgba(240,185,11,.22);
+      border-radius: 18px;
+      padding: 12px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom: 12px;
+    }
+    .hintCard .txt{ font-weight:1000; }
+    .hintCard .sub{ font-size:12px; color: var(--muted); font-weight:800; margin-top:4px; }
+    .hintCard .spark{
+      width:46px; height:34px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      display:flex; align-items:center; justify-content:center;
+      color: var(--accent2);
+      flex:0 0 auto;
+    }
+
+    .coinGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .coinBtn{
+      background: var(--card);
+      border:1px solid rgba(43,49,57,.85);
+      border-radius: 18px;
+      padding: 12px;
+      display:flex; align-items:center; gap:10px;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .08s ease, border-color .12s ease, background .12s ease;
+    }
+    .coinBtn:active{ transform: translateY(1px) scale(.99); }
+    .coinBtn:hover{ border-color: rgba(240,185,11,.35); background: rgba(240,185,11,.05); }
+    .coinBadge{
+      width:34px; height:34px;
+      border-radius: 14px;
+      display:flex; align-items:center; justify-content:center;
+      border:1px solid rgba(240,185,11,.25);
+      background: rgba(240,185,11,.10);
+      color: var(--accent2);
+      font-weight:1000;
+    }
+    .coinBtn .nm{ font-weight:1000; }
+    .coinBtn .sm{ font-size:12px; color: var(--muted); font-weight:800; margin-top:4px; }
+
+    /* Deposit details screen */
+    .screen{
+      background: var(--card2);
+      border:1px solid rgba(43,49,57,.85);
+      border-radius: var(--r24);
+      padding: 12px;
+      box-shadow: var(--shadow);
+    }
+    .backRow{
+      display:flex; align-items:center; gap:10px;
+      color: var(--muted);
+      font-weight:900;
+      cursor:pointer;
+      user-select:none;
+    }
+    .backRow .ico{
+      width:28px;height:28px;border-radius: 12px;
+      border:1px solid rgba(43,49,57,.85);
+      background: rgba(255,255,255,.03);
+      display:flex; align-items:center; justify-content:center;
+    }
+
+    .depTitle{
+      margin-top: 10px;
+      display:flex; align-items:center; gap:10px;
+      font-weight:1000;
+      font-size:16px;
+    }
+    .depLine{
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(43,49,57,.85);
+    }
+    .depLine .k{ font-size:12px; color:var(--muted); font-weight:800; }
+    .depLine .v{ font-size:14px; font-weight:1000; margin-top:6px; }
+    .select{
+      width:100%;
+      margin-top: 10px;
+      height: 40px;
+      border-radius: 14px;
+      border:1px solid rgba(43,49,57,.85);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      font-weight:900;
+      padding: 0 12px;
+      outline: none;
+    }
+    .addrRow{
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 18px;
+      border:1px solid rgba(43,49,57,.85);
+      background: rgba(255,255,255,.03);
+      display:flex; align-items:center; gap:10px;
+    }
+    .addr{
+      flex:1;
+      min-width:0;
+      font-weight:900;
+      font-size:12px;
+      color: var(--text);
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .primaryAction{
+      margin-top: 12px;
+      height: 46px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, var(--accent2), var(--accent));
+      border:1px solid rgba(240,185,11,.6);
+      color:#0B0E11;
+      font-weight:1000;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer;
+      user-select:none;
+    }
+    .note{
+      margin-top: 10px;
+      font-size:12px;
+      color: var(--muted);
+      font-weight:800;
+      line-height:1.35;
+    }
+
+    /* Toast */
+    .toast{
+      position: fixed;
+      left:50%;
+      bottom: calc(96px + var(--safe-bottom));
+      transform: translateX(-50%);
+      background: rgba(30,35,41,.92);
+      border:1px solid rgba(43,49,57,.85);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight:900;
+      font-size:12px;
+      box-shadow: var(--shadow);
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .18s ease, transform .18s ease;
+      z-index: 70;
+      max-width: 92vw;
+      text-align:center;
+    }
+    .toast.show{
+      opacity:1;
+      transform: translateX(-50%) translateY(-4px);
+    }
+
+    /* Small helpers */
+    .spacer12{ height:12px; }
+    .muted{ color: var(--muted); }
+  
+
+    /* timeframe toggle + helpers */
+    .hidden{ display:none !important; }
+
+    .seg{
+      display:flex;
+      align-items:center;
+      gap:2px;
+      padding:2px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(43,49,57,.85);
+    }
+    .segBtn{
+      appearance:none;
+      border:1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 900;
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor:pointer;
+      line-height: 1;
+      user-select:none;
+    }
+    .segBtn.active{
+      background: rgba(240,185,11,.14);
+      border-color: rgba(240,185,11,.22);
+      color: var(--accent);
+    }
+    .segBtn:active{ transform: translateY(1px); }
+
+    /* Settings sheet */
+    .setCard{ padding:14px; display:flex; flex-direction:column; gap:12px; }
+    .setTop{ display:flex; align-items:center; gap:12px; }
+    .avatar{
+      width:44px;height:44px;border-radius:16px;
+      background: radial-gradient(110% 120% at 20% 10%, rgba(240,185,11,.55), rgba(240,185,11,.08) 55%, rgba(255,255,255,.02) 100%), rgba(255,255,255,.02);
+      border:1px solid rgba(43,49,57,.85);
+      box-shadow: 0 10px 28px rgba(0,0,0,.35);
+    }
+    .setMeta{ display:flex; flex-direction:column; }
+    .setName{ font-weight:1000; font-size:14px; text-transform:lowercase; letter-spacing:.2px; }
+    .setId{ font-size:12px; color:var(--muted); margin-top:2px; }
+
+    .walletBtn{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid rgba(43,49,57,.85);
+      background: rgba(24,26,32,.55);
+      color:var(--text);
+      cursor:pointer;
+    }
+    .walletBtn .wLbl{ font-size:11px; color:var(--muted); }
+    .walletBtn .wAddr{ font-size:13px; font-weight:900; margin-top:2px; letter-spacing:.2px; }
+    .walletBtn .wIcon{
+      width:34px;height:34px;border-radius:14px;
+      display:flex; align-items:center; justify-content:center;
+      background: rgba(0,209,255,.10);
+      border:1px solid rgba(0,209,255,.22);
+      color:#8ee9ff;
+      flex:0 0 auto;
+    }
+    .walletBtn .wIcon svg{ width:18px;height:18px; }
+
+    .setRow{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .setK{ font-size:12px; color:var(--muted); }
+
+    .pillSeg{
+      display:flex;
+      padding:3px;
+      border-radius:999px;
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(43,49,57,.85);
+      gap:3px;
+    }
+    .pillBtn{
+      border:0;
+      background: transparent;
+      color:var(--muted);
+      padding:8px 12px;
+      border-radius:999px;
+      font-weight:900;
+      cursor:pointer;
+      transition: background .12s ease, color .12s ease, transform .08s ease, border-color .12s ease;
+      border:1px solid transparent;
+    }
+    .pillBtn:active{ transform: translateY(1px) scale(.99); }
+    .pillBtn.active{
+      background: rgba(240,185,11,.16);
+      border-color: rgba(240,185,11,.30);
+      color: var(--text);
+    }
+
+    .setLinks{ display:flex; flex-direction:column; gap:10px; margin-top:2px; }
+    .lineBtn{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid rgba(43,49,57,.85);
+      background: rgba(255,255,255,.02);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .lineBtn .chev{ color:var(--muted); font-size:16px; }
+
+    .setSocial{ display:flex; gap:10px; justify-content:space-between; }
+    .socBtn{
+      flex:1;
+      height:44px;
+      border-radius:16px;
+      border:1px solid rgba(43,49,57,.85);
+      background: rgba(255,255,255,.02);
+      color: var(--muted);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+    }
+    .socBtn svg{ width:18px;height:18px; }
+
+
+        /* Create deposit sheet (amount input only) */
+    .depAmtWrap{ padding: 14px; display:flex; flex-direction:column; gap:12px; }
+    .depAmtInputRow{
+      display:flex; align-items:center; gap:10px;
+      padding: 12px 12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(43,49,57,.85);
+    }
+    .depAmtInput{
+      flex:1; min-width:0;
+      background: transparent;
+      border:0;
+      outline:0;
+      color: var(--text);
+      font-size:16px;
+      font-weight:1000;
+      letter-spacing:-.2px;
+    }
+    .depAmtInput::placeholder{ color: rgba(132,142,156,.9); font-weight:900; }
+    .depAmtInputRow .cur{ color: var(--muted); font-weight:900; font-size:12px; white-space:nowrap; }
+
+    .depHint{
+      text-align:center;
+      font-size:12px;
+      color: var(--muted);
+      font-weight:800;
+      margin-top:-2px;
+    }
+
+    .depCreateBtn{
+      height:48px;
+      border-radius: 18px;
+      background: var(--lime);
+      color:#0B0E11;
+      font-weight:1100;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer;
+      user-select:none;
+      border:0;
+      box-shadow: 0 16px 28px rgba(0,0,0,.38);
+      transition: transform .08s ease, filter .12s ease;
+    }
+    .depCreateBtn:active{ transform: translateY(1px) scale(.99); }
+    .depCancelBtn{
+      height:44px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(43,49,57,.85);
+      color: var(--text);
+      font-weight:900;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer;
+      user-select:none;
+    }
+    .depCancelBtn:active{ transform: translateY(1px) scale(.99); }
+
+/* Active positions (ref-style) */
+.posList{ display:flex; flex-direction:column; gap:10px; }
+
+.posRow{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 12px;
+  border-radius:18px;
+  background:rgba(255,255,255,.04);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+  overflow:hidden;
+} 
+.posRow::before{
+  content:"";
+  position:absolute;
+  left:-56px;
+  top:-20px;
+  width:260px;
+  height:140%;
+  background: radial-gradient(ellipse at left center, rgba(240,185,11,.35), rgba(240,185,11,0) 70%);
+  pointer-events:none;
+}
+.posLeft, .posRight{ position:relative; z-index:1; display:flex; align-items:center; }
+.posLeft{ gap:10px; }
+.posRight{ gap:10px; }
+.posCoin{
+  width:30px; height:30px;
+  border-radius:999px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(240,185,11,.20);
+  border:1px solid rgba(240,185,11,.42);
+  color:var(--accent2);
+  font-weight:1000;
+  line-height:1;
+}
+.posAmt{
+  font-weight:1000;
+  font-size:26px;
+  letter-spacing:.2px;
+  color:var(--accent2);
+}
+.posPill{
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.06);
+  font-weight:900;
+  font-size:15px;
+  min-width:74px;
+  text-align:center;
+  color:rgba(255,255,255,.82);
+}
+.posPct{ color:var(--accent2); }
+.posPct.bad{ color:var(--bad); }
+.posTime{ color:rgba(255,255,255,.78); min-width:66px; }
+
+    .taskCard{
+      display:flex; gap:12px; align-items:flex-start;
+      padding:14px 14px;
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border-radius:18px;
+      margin-top:12px;
+    }
+    .taskCard:first-child{ margin-top:0; }
+    .taskCard .coin{
+      width:40px; height:40px; border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      flex:0 0 auto;
+    }
+    .taskCard .coin svg{ width:20px; height:20px; fill:var(--accent); opacity:.95; }
+    .taskCard .tt{ font-weight:1000; font-size:14px; }
+    .taskCard .meta{ margin-top:6px; color:var(--muted); font-size:12px; line-height:1.25; }
+    
+</style>
+</head>
+<body>
+  <div class="app">
+<div class="content" id="content"></div>
+
+    <div class="nav" role="navigation" aria-label="Bottom navigation">
+      <div class="navrow">
+        <div class="tab" data-tab="tasks">
+          <svg viewBox="0 0 24 24"><path d="M12 17l-5 3 1.5-5.5L4 10l5.7-.3L12 4l2.3 5.7L20 10l-4.5 4.5L17 20z"/></svg>
+          <div class="t">Задания</div>
+        </div>
+        <div class="tab" data-tab="positions">
+          <svg viewBox="0 0 24 24"><path d="M6 6v12"/><path d="M6 9h4"/><path d="M10 9v10"/><path d="M14 5v14"/><path d="M14 11h4"/><path d="M18 11v7"/></svg>
+          <div class="t">Позиции</div>
+        </div>
+      <div class="tab" data-tab="team">
+          <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <div class="t">Команда</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay" id="overlay" aria-hidden="true">
+      <div class="sheet" role="dialog" aria-modal="true" aria-label="Modal">
+        <div class="sheetHeader">
+          <div class="title" id="sheetTitle">—</div>
+          <div class="close" id="sheetClose" title="Закрыть">
+            <span class="ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+            </span>
+          </div>
+        </div>
+        <div class="sheetBody" id="sheetBody"></div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+  </div>
+
+<script>
+(() => {
+  const $ = (s, el=document) => el.querySelector(s);
+  const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+
+  const state = {
+    tab: "positions",
+    balanceUsd: 0,
+    uf: 9500,
+    hideBalance: false,
+    // demo data
+    profit: 0,
+    activePositions: [],
+    positionsAlt: true,
+    chart: [12, 14, 13, 18, 22, 25, 28, 33, 41, 46, 52, 61, 72, 80],
+        virtualDeposit: 725,
+    createDepositAmt: null,
+    kline: genKlineSeries(725, 48, 1337),
+    tf: "12h",
+    monthPerf: genMonthlyPerf(1337),
+    deals: [
+      {sym: "Uniswap (UNI)", dir: "Long (x5)", pct: 3.15, when: "10 авг 2025, 03:45"},
+      {sym: "Ethereum (ETH)", dir: "Long (x5)", pct: 5.05, when: "09 авг 2025, 17:06"},
+    ],
+        user: {
+      name: "upfin",
+      id: "75950229",
+      wallet: "UQB7kYHhF1gY8q3xj7cVJr2yQvCq1eQ9k2XJcZr7V1z0pW8s",
+      lang: "ru",
+      vibration: true
+    },
+
+    team: {
+      totalRewards: 0,
+      sessionSize: 725,
+      frozen: 9.394,
+      pending: 2.5294,
+      total: 54,
+      active: 54,
+      inactive: 0,
+      lvl1: { people: 51, pct: 7.00 },
+      lvl2: { people: 3, pct: 3.50 }
+    },
+    refLink: "t.me/bot?startapp=referr_demo",
+    deposit: {
+  coin: null,
+  tonAddr: "UQB7kYHhF1gY8q3xj7cVJr2yQvCq1eQ9k2XJcZr7V1z0pW8s",
+  minTon: 0.5
+}
+  };
+
+  const icons = {
+    coins: {
+      USDT: coinSVG("T"),
+      BNB: coinSVG("B"),
+      BTC: coinSVG("₿"),
+      ETH: coinSVG("◇"),
+      TON: coinSVG("V"),
+      LTC: coinSVG("Ł"),
+      USDC: coinSVG("$"),
+    }
+  };
+
+  function coinSVG(letter){
+
+
+
+    return `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 4a8 8 0 1 0 0 16a8 8 0 0 0 0-16Z"/>
+        <path d="M12 8v8"/>
+        <path d="M9 10h6"/>
+      </svg>
+    `;
+  }
+
+  function fmtMoney(v){
+    const s = Number(v).toFixed(2);
+    return "$" + s.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
+  function fmtInt(v){
+    const n = Math.round(Number(v) || 0);
+    return n.toLocaleString("ru-RU");
+  }
+  function fmtPct(p){
+    const sign = p > 0 ? "+" : "";
+    return sign + p.toFixed(2) + "%";
+  }
+
+
+  function fmtRuSmart(v){
+    const abs = Math.abs(v);
+    const dp = abs < 0.01 ? 6 : (abs < 1 ? 4 : 2);
+    return abs.toLocaleString("ru-RU", {minimumFractionDigits: dp, maximumFractionDigits: dp});
+  }
+
+  
+  function shortAddr(addr){
+    if(!addr) return "";
+    const s = String(addr);
+    if(s.length <= 14) return s;
+    return s.slice(0,6) + "…" + s.slice(-4);
+  }
+
+function calcPnlToday(){
+    if(!state.activePositions || state.activePositions.length === 0){
+      return { usd: "0,00 $", pct: "0,00 %", cls: "muted" };
+    }
+
+    const d = state.kline;
+    if(!d || d.length < 2){
+      return { usd: "0,00 $", pct: "0,00 %", cls: "muted" };
+    }
+    const start = d[0].o;
+    const end = d[d.length-1].c;
+    const usd = end - start;
+    const pct = (usd / start) * 100;
+
+    const sUsd = (usd > 0 ? "+" : (usd < 0 ? "-" : "")) + fmtRuSmart(usd) + " $";
+    const sPct = (pct > 0 ? "+" : (pct < 0 ? "-" : "")) + fmtRuSmart(pct) + " %";
+    return { usd: sUsd, pct: sPct, cls: usd >= 0 ? "good" : "bad" };
+  }
+
+  function updatePnlDom(){
+    const row = $("#pnlTodayRow");
+    if(!row) return;
+    const val = row.querySelector(".pnl-val");
+    if(!val) return;
+    const pnl = calcPnlToday();
+    val.classList.remove("good","bad","muted");
+    val.classList.add(pnl.cls);
+    val.innerHTML = `${pnl.usd} <span class="pnl-pct">(${pnl.pct})</span>`;
+  }
+
+  const content = $("#content");
+  const overlay = $("#overlay");
+  const sheetEl = overlay ? $(".sheet", overlay) : null;
+  const sheetHeaderEl = overlay ? $(".sheetHeader", overlay) : null;
+  const sheetTitle = $("#sheetTitle");
+  const sheetBody = $("#sheetBody");
+  const sheetClose = $("#sheetClose");
+  const toast = $("#toast");
+
+  let klineTimer = null;
+
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove("show"), 1400);
+  }
+
+  function setTab(tab){
+    state.tab = tab;
+    if(tab === "positions") ensureKlineTimer();
+    else stopKlineTimer();
+    render();
+  }
+
+  function renderTopCard(){
+    const pnl = calcPnlToday();
+    const hidden = !!state.hideBalance;
+    const balText = hidden ? "••••••" : fmtMoney(state.balanceUsd);
+    const fxdText = hidden ? "••••• FXD" : `${state.uf.toLocaleString("ru-RU")} FXD`;
+
+    const eyeSvg = hidden
+      ? `<svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><path d="M4 4l16 16"/></svg>`
+      : `<svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>`;
+
+    return `
+      <div class="topcard">
+        <div class="tophead">
+          <div class="topheadL">
+            <div class="topTitle">Мой баланс</div>
+            <button type="button" class="eyeBtn" id="btnEye" title="${hidden ? "Показать" : "Скрыть"}">
+              <span class="ico" aria-hidden="true">${eyeSvg}</span>
+            </button>
+          </div>
+
+          <div class="row" style="gap:8px;">
+            <div class="iconbtn" id="btnSupport" title="Поддержка">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M4 12v6a2 2 0 0 0 2 2h1v-8H6a2 2 0 0 0-2 2Z"/><path d="M20 12v6a2 2 0 0 1-2 2h-1v-8h1a2 2 0 0 1 2 2Z"/><path d="M18 19a3 3 0 0 1-3 3h-3"/><path d="M12 22h-2"/></svg>
+              </span>
+            </div>
+
+            <div class="iconbtn" id="btnSettings" title="Настройки">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.08a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.51a2 2 0 0 1 1-1.73l.15-.08a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2Z"/><circle cx="12" cy="12" r="3"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="balance">${balText}</div>
+        <div class="subBalance">${fxdText}</div>
+<div class="pnlrow" id="pnlTodayRow" title="PnL за сегодня">
+          <div class="pnl-label"><span class="dotted">PnL за сегодня</span></div>
+          <div class="pnl-val ${pnl.cls}">${pnl.usd} <span class="pnl-pct">(${pnl.pct})</span></div>
+          <div class="pnl-arrow">›</div>
+        </div>
+
+        <div class="btnrow">
+          <div class="btn primary" id="btnDeposit">
+            <span class="ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/></svg>
+            </span>
+            Пополнить
+          </div>
+          <div class="btn ghost" id="btnWithdraw">
+            <span class="ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 21V9"/><path d="M7 14l5-5 5 5"/><path d="M4 3h16"/></svg>
+            </span>
+            Вывести
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  
+  
+function renderCreateHero(){
+    if(state.activePositions.length !== 0) return "";
+    return `
+      <div class="section">
+        <div class="createHero">
+          <div class="createHeroTitle">Создай свою позицию и зарабатывай<br><span class="hi">до 30%</span> прибыли.</div>
+          <div class="createHeroArrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <button class="createHeroBtn" type="button" id="btnCreatePosHero">
+            <span>Создать собственную позицию</span>
+            <span class="bubble" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 6v12"/><path d="M6 12h12"/></svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+function renderPositions(){
+    const items = state.activePositions.map(p => {
+    const cls = p.pct >= 0 ? "good" : "bad";
+    return `
+      <div class="posRow">
+        <div class="posLeft">
+          <div class="posCoin" aria-hidden="true">$</div>
+          <div class="posAmt">${fmtMoney(p.amount)}</div>
+        </div>
+        <div class="posRight">
+          <div class="posPill posPct ${cls}">${fmtPct(p.pct)}</div>
+          <div class="posPill posTime">${p.time}</div>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+    const makeAlt = (state.positionsAlt && state.activePositions.length > 0) ? `
+      <div class="bigAction" id="btnCreatePos">
+        Создать новую позицию
+      </div>
+    ` : "";
+
+    return `
+      ${renderTopCard()}
+
+      <div class="section">
+        <div class="grid2">
+          <div class="statcard">
+            <div class="k">Текущая прибыль</div>
+            <div class="v"><span class="usdIcon">$</span> ${state.profit.toFixed(2)}</div>
+          </div>
+          <div class="statcard">
+            <div class="k">Активные позиции</div>
+            <div class="v">
+              <span class="mini">#</span> ${state.activePositions.length}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      ${renderCreateHero()}
+
+      <div class="section ${state.activePositions.length ? "" : "hidden"}">
+        <div class="klineCard">
+          <div class="klineHead">
+            <div class="klineTitle">Движение виртуального депозита</div>
+            <div class="seg" role="tablist" aria-label="Период">
+              <button class="segBtn" type="button" data-tf="12h">12h</button>
+              <button class="segBtn" type="button" data-tf="1m">1m</button>
+            </div>
+          </div>
+          <div class="klineWrap compact" id="kWrap12">
+            <canvas id="kline" height="190"></canvas>
+          </div>
+          <div class="klineWrap compact hidden" id="kWrap1m">
+            <canvas id="mbar" height="190"></canvas>
+          </div>
+        </div>
+      </div>
+
+<div class="section ${state.activePositions.length ? "" : "hidden"}">
+        <div class="h2">Активные позиции</div>
+        <div class="posList">
+          ${items}
+        </div>
+        ${makeAlt}
+      </div>
+    `;
+  }
+
+  function renderTasks(){
+    const tasks = [
+      {t:"Ежедневный чек-ин", r:"+50 FXD"},
+      {t:"Пригласи 1 друга", r:"+1 спин"},
+      {t:"Открой позицию", r:"+x2 бонус (демо)"},
+    ];
+
+    return `
+      ${renderTopCard()}
+      <div class="section">
+        ${tasks.map((x,i)=>`
+          <div class="taskCard">
+            <div class="coin" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 17l-5 3 1.5-5.5L4 10l5.7-.3L12 4l2.3 5.7L20 10l-4.5 4.5L17 20z"/></svg>
+            </div>
+            <div class="main">
+              <div class="line1">
+                <div class="tt">${x.t}</div>
+                <div class="badge good">${x.r}</div>
+              </div>
+              <div class="meta">Нажми и получи награду (демо).</div>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    `;
+  }
+
+  function renderTeam(){
+    const t = state.team;
+    return `
+      ${renderTopCard()}
+
+      <div class="section">
+        <div class="metrics">
+          <div class="metric">
+            <div class="k">Всего наград</div>
+            <div class="v" style="color:var(--accent2);">$${t.totalRewards}</div>
+          </div>
+          <div class="metric">
+            <div class="k">Размер сессии</div>
+            <div class="v">${fmtMoney(t.sessionSize)}</div>
+          </div>
+          <div class="metric">
+            <div class="k">Заморожено</div>
+            <div class="v">$${t.frozen}</div>
+          </div>
+          <div class="metric">
+            <div class="k">В ожидании</div>
+            <div class="v">$${t.pending}</div>
+          </div>
+        </div>
+
+        <div class="takeBtn" id="btnTake">ЗАБРАТЬ</div>
+
+        <div class="refBox">
+          <div class="k">Реферальная ссылка</div>
+          <div class="refRow">
+            <input id="refInput" value="${state.refLink}" readonly />
+            <div class="copybtn" id="btnCopyRef" title="Копировать">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M8 8h12v12H8z"/><path d="M4 4h12v12H4z"/></svg>
+              </span>
+            </div>
+          </div>
+          <div class="invite" id="btnInvite">Пригласить друзей</div>
+        </div>
+
+        <div class="teamTop">
+          <div class="chip">
+            <div class="num">${t.total}</div>
+            <div class="t">Всего</div>
+          </div>
+          <div class="chip active">
+            <div class="num">${t.active}</div>
+            <div class="t">Активные</div>
+          </div>
+          <div class="chip inactive">
+            <div class="num">${t.inactive}</div>
+            <div class="t">Неактивные</div>
+          </div>
+        </div>
+
+        <div class="levelsHdr">
+          <div class="t">Активные уровни</div>
+          <div class="more">Показать все</div>
+        </div>
+
+        <div class="levelGrid">
+          <div class="level">
+            <div class="top">
+              <div class="lvl">1 ур</div>
+              <div class="people">${t.lvl1.people}
+              </div>
+            </div>
+            <div class="pct">${t.lvl1.pct.toFixed(2)}% с депа</div>
+          </div>
+
+          <div class="level">
+            <div class="top">
+              <div class="lvl">2 ур</div>
+              <div class="people">
+                <span class="ico" aria-hidden="true" style="width:16px;height:16px;">
+                  <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
+                </span>
+                ${t.lvl2.people}
+              </div>
+            </div>
+            <div class="pct">${t.lvl2.pct.toFixed(2)}% с депа</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+
+  function addDemoPosition(amount){
+    const amt = Math.max(0, Number(amount) || 0);
+    if(amt < 0.5){
+      showToast("Минимальный депозит 0.5");
+      return;
+    }
+
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2,"0");
+    const mm = String(now.getMinutes()).padStart(2,"0");
+
+    const pct = (Math.random() * 10) - 5; // -5..+5
+
+    state.activePositions.unshift({
+      id: Math.random(),
+      amount: amt,
+      pct: pct,
+      time: `${hh}:${mm}`,
+      status: pct < 0 ? "bolt" : "ok"
+    });
+
+    // totals
+    state.profit = state.activePositions.reduce((acc, p) => acc + (p.amount * (p.pct/100)), 0);
+    state.balanceUsd = state.activePositions.reduce((acc, p) => acc + p.amount, 0);
+    state.virtualDeposit = state.balanceUsd;
+
+    // regenerate kline so PnL feels tied to deposit size
+    state.kline = genKlineSeries(Math.max(1, state.virtualDeposit), 48, (Date.now() >>> 0));
+
+    showToast("Позиция открыта (демо)");
+    render();
+  }
+
+  function openCreateDepositSheet(prefillAmt=null){
+    state.createDepositAmt = null;
+    const MIN = 0.5;
+    const MAX = 5000;
+
+    const clamp = (v) => Math.max(MIN, Math.min(MAX, v));
+
+    openModal("Открытие позиции", `
+      <div class="depAmtWrap">
+        <div class="depAmtInputRow">
+          <input class="depAmtInput" id="depAmtInput" inputmode="decimal" placeholder="Введите сумму депозита" autocomplete="off">
+          <div class="cur">$</div>
+        </div>
+        <div class="depHint">от $0.5</div>
+
+        <button class="depCreateBtn" type="button" id="depCreateOk">Открыть позицию</button>
+        <button class="depCancelBtn" type="button" id="depCreateCancel">Отмена</button>
+      </div>
+    `);
+
+    const input = $("#depAmtInput", sheetBody);
+
+    if(input && prefillAmt !== null && prefillAmt !== undefined){
+      const pv = Number(prefillAmt);
+      if(Number.isFinite(pv) && pv > 0){
+        state.createDepositAmt = pv;
+        input.value = String(pv);
+      }
+    }
+
+    const parseAmt = () => {
+      const raw = (input?.value || "").trim().replace(",", ".");
+      // allow digits + dot only
+      const cleaned = raw.replace(/[^\d.]/g,"");
+      const num = Number(cleaned);
+      return Number.isFinite(num) ? num : NaN;
+    };
+
+    if(input){
+      // keep it sane while typing, but don’t fight the user too hard
+      input.oninput = () => {
+        input.value = input.value.replace(/[^\d.,]/g,"");
+      };
+      input.onblur = () => {
+        const n = parseAmt();
+        if(Number.isFinite(n)){
+          const v = clamp(n);
+          state.createDepositAmt = v;
+          input.value = String(v);
+        }
+      };
+      setTimeout(() => { try{ input.focus(); }catch(e){} }, 50);
+    }
+
+    const ok = $("#depCreateOk", sheetBody);
+    const cancel = $("#depCreateCancel", sheetBody);
+
+    if(ok) ok.onclick = () => {
+      const n = parseAmt();
+      if(!Number.isFinite(n)){
+        showToast("Введите сумму");
+        return;
+      }
+      const v = clamp(n);
+      state.createDepositAmt = v;
+      addDemoPosition(v);
+      closeModal();
+      setTab("positions");
+    };
+
+    if(cancel) cancel.onclick = closeModal;
+  }
+
+
+
+  function render(){
+    // tabs
+    $$(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === state.tab));
+
+    // page
+    let html = "";
+    if(state.tab === "positions") html = renderPositions();
+if(state.tab === "team") html = renderTeam();
+if(state.tab === "tasks") html = renderTasks();
+    content.innerHTML = html;
+
+    // wire header buttons
+    const btnDeposit = $("#btnDeposit");
+    const btnWithdraw = $("#btnWithdraw");
+    if(btnDeposit) btnDeposit.onclick = () => openDepositSheet();
+    if(btnWithdraw) btnWithdraw.onclick = () => openWithdrawSheet();
+
+    const btnSupport = $("#btnSupport");
+const btnSettings = $("#btnSettings");
+    const btnEye = $("#btnEye");
+    if(btnSupport) btnSupport.onclick = () => showToast("Поддержка: демо");
+if(btnSettings) btnSettings.onclick = () => openSettingsSheet();
+    if(btnEye) btnEye.onclick = () => {
+      state.hideBalance = !state.hideBalance;
+      render();
+    };
+
+    const pnlRow = $("#pnlTodayRow");
+    if(pnlRow) pnlRow.onclick = () => {
+      const p = calcPnlToday();
+      showToast(`PnL: ${p.usd} (${p.pct})`);
+    };
+
+    const btnCreate = $("#btnCreatePos");
+    const btnCreateHero = $("#btnCreatePosHero");
+
+    if(btnCreate) btnCreate.onclick = openCreateDepositSheet;
+    if(btnCreateHero) btnCreateHero.onclick = openCreateDepositSheet;
+
+    // team actions
+    const btnCopyRef = $("#btnCopyRef");
+    const refInput = $("#refInput");
+    if(btnCopyRef && refInput){
+      btnCopyRef.onclick = async () => {
+        try{
+          await navigator.clipboard.writeText(refInput.value);
+          showToast("Ссылка скопирована");
+        }catch(e){
+          refInput.select();
+          document.execCommand("copy");
+          showToast("Скопировано (fallback)");
+        }
+      };
+    }
+    const btnInvite = $("#btnInvite");
+    if(btnInvite) btnInvite.onclick = () => showToast("Инвайт: демо");
+
+    const btnTake = $("#btnTake");
+    if(btnTake) btnTake.onclick = () => showToast("Нечего забирать (демо)");
+
+    // chart
+    const c = $("#c");
+    if(c) drawChart(c, state.chart);
+
+    // timeframe toggle (positions)
+    $$(".segBtn").forEach(b => {
+      b.classList.toggle("active", b.dataset.tf === state.tf);
+      b.onclick = () => {
+        state.tf = b.dataset.tf;
+        render();
+      };
+    });
+
+    const w12 = $("#kWrap12");
+    const w1m = $("#kWrap1m");
+    if(w12 && w1m){
+      w12.classList.toggle("hidden", state.tf !== "12h");
+      w1m.classList.toggle("hidden", state.tf !== "1m");
+    }
+
+    // charts (positions)
+    const k = $("#kline");
+    const m = $("#mbar");
+    if(state.tf === "12h" && k && k.clientWidth > 0){
+      drawKline(k, state.kline);
+      updatePnlDom();
+      ensureKlineTimer();
+    }else{
+      stopKlineTimer();
+      if(m) drawMonthlyBars(m, state.monthPerf);
+    }
+  }
+
+  function drawChart(canvas, series){
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width = canvas.clientWidth * devicePixelRatio;
+    const H = canvas.height = 120 * devicePixelRatio;
+
+    ctx.clearRect(0,0,W,H);
+
+    // grid
+    ctx.globalAlpha = 0.35;
+    ctx.strokeStyle = "rgba(43,49,57,1)";
+    ctx.lineWidth = 1 * devicePixelRatio;
+    const gridY = 4;
+    for(let i=1;i<gridY;i++){
+      const y = (H/gridY) * i;
+      ctx.beginPath();
+      ctx.moveTo(0,y);
+      ctx.lineTo(W,y);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    const min = Math.min(...series);
+    const max = Math.max(...series);
+    const pad = (max-min) * 0.15 || 1;
+
+    const xStep = W/(series.length-1);
+    const mapY = v => {
+      const t = (v-(min-pad)) / ((max+pad)-(min-pad));
+      return H - t*H;
+    };
+
+    // area fill
+    ctx.beginPath();
+    series.forEach((v,i)=>{
+      const x = i*xStep;
+      const y = mapY(v);
+      if(i===0) ctx.moveTo(x,y);
+      else ctx.lineTo(x,y);
+    });
+    ctx.lineTo(W,H);
+    ctx.lineTo(0,H);
+    ctx.closePath();
+
+    const grad = ctx.createLinearGradient(0,0,0,H);
+    grad.addColorStop(0, "rgba(240,185,11,.35)");
+    grad.addColorStop(1, "rgba(240,185,11,0)");
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // line
+    ctx.beginPath();
+    series.forEach((v,i)=>{
+      const x = i*xStep;
+      const y = mapY(v);
+      if(i===0) ctx.moveTo(x,y);
+      else ctx.lineTo(x,y);
+    });
+    ctx.lineWidth = 2.5 * devicePixelRatio;
+    ctx.strokeStyle = "rgba(240,185,11,1)";
+    ctx.stroke();
+
+    // last dot
+    const lx = (series.length-1)*xStep;
+    const ly = mapY(series[series.length-1]);
+    ctx.beginPath();
+    ctx.arc(lx, ly, 4.2*devicePixelRatio, 0, Math.PI*2);
+    ctx.fillStyle = "rgba(240,185,11,1)";
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(lx, ly, 9*devicePixelRatio, 0, Math.PI*2);
+    ctx.fillStyle = "rgba(240,185,11,.14)";
+    ctx.fill();
+  }
+
+
+  function mulberry32(a){
+    return function(){
+      let t = a += 0x6D2B79F5;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function genKlineSeries(startValue, candles, seed){
+    const rnd = mulberry32(seed >>> 0);
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+    const base = Math.max(1e-9, startValue);
+    let p = 0; // percent from base, bounded in [-5; 5]
+    const out = [];
+    let t = Date.now() - 12*60*60*1000;
+
+    for(let i=0;i<candles;i++){
+      const oPct = p;
+
+      // More volatility, but with mean reversion so we don't slam into +/-5% constantly.
+      const meanRevert = -p * (0.12 + rnd()*0.06);
+      const impulse = (rnd() - 0.5) * 3.80;
+      p = clamp(p + meanRevert + impulse, -4.7, 4.7);
+
+      const cPct = p;
+      const body = Math.abs(cPct - oPct);
+
+      // Taller wicks (still bounded by the +/-5% axis).
+      const wickUp = 0.15 + rnd()*1.05;
+      const wickDn = 0.15 + rnd()*1.05;
+      const hPct = clamp(Math.max(oPct, cPct) + wickUp, -5, 5);
+      const lPct = clamp(Math.min(oPct, cPct) - wickDn, -5, 5);
+
+      const o = base * (1 + oPct/100);
+      const c = base * (1 + cPct/100);
+      const h = base * (1 + hPct/100);
+      const l = base * (1 + lPct/100);
+
+      const v = (40 + rnd()*260) * (0.70 + Math.min(3.5, body)*0.75);
+      out.push({ o, h, l, c, v, t });
+      t += 15*60*1000;
+    }
+    return out;
+  }
+
+  function genMonthlyPerf(seed){
+    // fixed-ish demo like Binance monthly bars
+    const base = [
+      {m:"Jan", v:-3.1},
+      {m:"Feb", v:49.0},
+      {m:"Mar", v:-22.3},
+      {m:"Apr", v:-1.6},
+      {m:"May", v:3.5},
+      {m:"Jun", v:-42.9},
+      {m:"Jul", v:10.0},
+      {m:"Aug", v:82.0},
+      {m:"Sep", v:-15.9},
+      {m:"Oct", v:87.5},
+      {m:"Nov", v:39.2},
+      {m:"Dec", v:0.0},
+    ];
+    // tiny deterministic jitter so it feels "alive" but stable
+    const rnd = mulberry32((seed ^ 0xA5A5A5A5) >>> 0);
+    return base.map(x => ({
+      m: x.m,
+      v: Math.max(-88, Math.min(88, x.v + (rnd()-0.5)*1.2))
+    }));
+  }
+
+  function sma(data, period){
+    const res = new Array(data.length).fill(null);
+    let sum = 0;
+    for(let i=0;i<data.length;i++){
+      const v = data[i];
+      sum += v;
+      if(i >= period) sum -= data[i-period];
+      if(i >= period-1) res[i] = sum/period;
+    }
+    return res;
+  }
+
+  function updateKlineLegend(){
+    const el = $("#kLegend");
+    const maEl = $("#kMA");
+    if(!el || !maEl) return;
+
+    const d = state.kline;
+    if(!d || !d.length) return;
+
+    const open = d[0].o;
+    const close = d[d.length-1].c;
+    let high = -Infinity;
+    let low = Infinity;
+    for(const x of d){
+      if(x.h > high) high = x.h;
+      if(x.l < low) low = x.l;
+    }
+    const chgPct = (close/open - 1) * 100;
+    const chgCls = chgPct >= 0 ? "tgood" : "tbad";
+
+    const fmt = (n) => {
+      const s = n.toFixed(2);
+      return s.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    };
+
+    el.innerHTML = `
+      <span>Открыть <b>${fmt(open)}</b></span>
+      <span>Максимум <b>${fmt(high)}</b></span>
+      <span>Минимум <b>${fmt(low)}</b></span>
+      <span>Закрыть <b>${fmt(close)}</b></span>
+      <span class="${chgCls}">ИЗМ <b>${(chgPct>0?"+":"")}${chgPct.toFixed(2)}%</b></span>
+    `;
+
+    const closes = d.map(x => x.c);
+    const ma7 = sma(closes, 7);
+    const ma25 = sma(closes, 25);
+    const ma99 = sma(closes, 40); // 99 на 48 свечах не живёт, берём длинную, чтобы выглядело как Binance
+    const last = (arr) => {
+      for(let i=arr.length-1;i>=0;i--) if(arr[i] != null) return arr[i];
+      return null;
+    };
+
+    const v7 = last(ma7), v25 = last(ma25), v99 = last(ma99);
+
+    maEl.innerHTML = `
+      <span class="ma7">MA(7) <b>${v7?fmt(v7):"—"}</b></span>
+      <span class="ma25">MA(25) <b>${v25?fmt(v25):"—"}</b></span>
+      <span class="ma99">MA(99) <b>${v99?fmt(v99):"—"}</b></span>
+    `;
+  }
+
+  function stepKline(){
+    const d = state.kline;
+    if(!d || d.length < 5) return;
+
+    // update the last candle a bit (fake "live" movement)
+    const last = d[d.length-1];
+    const o = last.o;
+    const base = last.c;
+
+    const jitter = (Math.random() - 0.5) * 0.45; // percent
+    const c = base * (1 + jitter/100);
+
+    last.c = c;
+    last.h = Math.max(last.h, c, o);
+    last.l = Math.min(last.l, c, o);
+    last.v = last.v * (0.85 + Math.random()*0.35);
+
+    // occasionally roll in a new candle to keep it "moving"
+    if(Math.random() < 0.22){
+      const prev = last.c;
+      const nO = prev;
+      const chg = (Math.random() - 0.48) * 1.10;
+      const nC = nO * (1 + chg/100);
+      const wickUp = (0.04 + Math.random()*0.28) / 100;
+      const wickDn = (0.04 + Math.random()*0.28) / 100;
+      const nH = Math.max(nO,nC) * (1 + wickUp);
+      const nL = Math.min(nO,nC) * (1 - wickDn);
+      const nV = (20 + Math.random()*180) * (0.6 + Math.min(2.5, Math.abs(chg))*0.6);
+      const nT = last.t + 15*60*1000;
+
+      d.push({ o:nO, h:nH, l:nL, c:nC, v:nV, t:nT });
+      while(d.length > 48) d.shift();
+    }
+  }
+
+  function ensureKlineTimer(){
+    if(klineTimer) return;
+    klineTimer = setInterval(() => {
+      if(state.tab !== "positions") return;
+      if(state.tf !== "12h") return;
+      stepKline();
+      const k = $("#kline");
+      if(k && k.clientWidth > 0){
+        drawKline(k, state.kline);
+        updatePnlDom();
+      }
+    }, 1800);
+  }
+
+  function stopKlineTimer(){
+    if(!klineTimer) return;
+    clearInterval(klineTimer);
+    klineTimer = null;
+  }
+
+  function drawKline(canvas, data){
+    const ctx = canvas.getContext("2d");
+
+    const css = getComputedStyle(document.documentElement);
+    const UP = (css.getPropertyValue("--candleUp").trim() || "#0ECB81");
+    const DN = (css.getPropertyValue("--bad").trim() || "#F6465D");
+    const GRID = (css.getPropertyValue("--grid").trim() || "rgba(43,49,57,1)");
+    const MA7C = (css.getPropertyValue("--accent2").trim() || "#F8D12F");
+    const MA25C = (css.getPropertyValue("--ma25").trim() || "#E13CBB");
+    const MA99C = (css.getPropertyValue("--ma99").trim() || "#8B6BFF");
+    const MUTED = (css.getPropertyValue("--muted").trim() || "#848E9C");
+
+    const dpr = devicePixelRatio || 1;
+    const W = canvas.width = Math.floor(canvas.clientWidth * dpr);
+    const H = canvas.height = Math.floor(190 * dpr);
+
+    ctx.clearRect(0,0,W,H);
+
+    const padL = 10 * dpr;
+    const padR = 46 * dpr;
+    const padT = 8 * dpr;
+    const padB = 10 * dpr;
+
+    const priceH = Math.floor(H - padT - padB);
+// bounds
+    // Volume stays real, but the *price axis* is now percent change of the virtual deposit.
+    // Fixed range requested: -5% .. +5%.
+    const base = (data && data.length ? (data[0].o || data[0].c || 1) : 1);
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const toPct = (v) => ((v / base) - 1) * 100;
+    const min = -5;
+    const max =  5;
+
+    const n = data.length;
+    const slot = (W - padL - padR) / n;
+    const bodyW = Math.max(3*dpr, Math.min(slot*0.85, 14*dpr));
+
+    const yPrice = (raw) => {
+      // Map raw value -> percent change, then clamp into [-5; 5] to keep the axis stable.
+      const v = clamp(toPct(raw), min, max);
+      const t = (v - min) / (max - min);
+      return padT + priceH - t * priceH;
+    };
+
+    // grid
+    ctx.strokeStyle = GRID;
+    ctx.lineWidth = 1 * dpr;
+    ctx.globalAlpha = 0.38;
+
+    const gy = 4;
+    for(let i=0;i<=gy;i++){
+      const y = padT + (priceH/gy)*i;
+      ctx.beginPath();
+      ctx.moveTo(0,y);
+      ctx.lineTo(W,y);
+      ctx.stroke();
+    }
+    // vertical grid
+    const gx = 4;
+    for(let i=0;i<=gx;i++){
+      const x = padL + ((W - padL - padR)/gx)*i;
+      ctx.beginPath();
+      ctx.moveTo(x, padT);
+      ctx.lineTo(x, H-padB);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    // right axis labels
+    ctx.fillStyle = MUTED;
+    ctx.font = `${11*dpr}px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial`;
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    const fmtPctAxis = (v) => {
+      const s = (Math.abs(v) < 1e-9) ? "0" : (v.toFixed(1).replace(/\.0$/, ""));
+      return s + "%";
+    };
+    const labelYs = [padT + 2*dpr, padT + priceH/2, padT + priceH - 2*dpr];
+    const labelVals = [max, (max+min)/2, min];
+    for(let i=0;i<labelYs.length;i++){
+      ctx.fillText(fmtPctAxis(labelVals[i]), W - 6*dpr, labelYs[i]);
+    }
+
+    // candles
+    for(let i=0;i<n;i++){
+      const x = padL + i*slot + slot/2;
+      const c = data[i];
+
+      const up = c.c >= c.o;
+      const col = up ? UP : DN;
+
+      const yO = yPrice(c.o);
+      const yC = yPrice(c.c);
+      const yH = yPrice(c.h);
+      const yL = yPrice(c.l);
+
+      // wick
+      ctx.strokeStyle = col;
+      ctx.lineWidth = 1.2*dpr;
+      ctx.beginPath();
+      ctx.moveTo(x, yH);
+      ctx.lineTo(x, yL);
+      ctx.stroke();
+
+      // body
+      const top = Math.min(yO,yC);
+      const bot = Math.max(yO,yC);
+      const h = Math.max(1.2*dpr, bot-top);
+      ctx.fillStyle = col;
+      ctx.fillRect(x - bodyW/2, top, bodyW, h);
+}
+
+    // MA lines
+    const closes = data.map(x => x.c);
+    const ma7 = sma(closes, 7);
+    const ma25 = sma(closes, 25);
+    const ma99 = sma(closes, 40);
+
+    function drawMA(arr, color){
+      ctx.beginPath();
+      let started = false;
+      for(let i=0;i<n;i++){
+        const v = arr[i];
+        if(v == null) continue;
+        const x = padL + i*slot + slot/2;
+        const y = yPrice(v);
+        if(!started){ ctx.moveTo(x,y); started = true; }
+        else ctx.lineTo(x,y);
+      }
+      if(!started) return;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.6*dpr;
+      ctx.globalAlpha = 0.95;
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+
+    drawMA(ma7, MA7C);
+    drawMA(ma25, MA25C);
+    drawMA(ma99, MA99C);
+  }
+
+  function drawMonthlyBars(canvas, items){
+    const ctx = canvas.getContext("2d");
+    const css = getComputedStyle(document.documentElement);
+    const UP = (css.getPropertyValue("--pnlGreen").trim() || "#0ECB81");
+    const DN = (css.getPropertyValue("--bad").trim() || "#F6465D");
+    const GRID = (css.getPropertyValue("--grid").trim() || "rgba(43,49,57,1)");
+    const MUTED = (css.getPropertyValue("--muted").trim() || "#848E9C");
+
+    const dpr = devicePixelRatio || 1;
+    const W = canvas.width = Math.floor(canvas.clientWidth * dpr);
+    const H = canvas.height = Math.floor(190 * dpr);
+    ctx.clearRect(0,0,W,H);
+
+    const padL = 34 * dpr;
+    const padR = 10 * dpr;
+    const padT = 10 * dpr;
+    const padB = 28 * dpr;
+
+    const plotW = W - padL - padR;
+    const plotH = H - padT - padB;
+
+    // axis range like screenshot
+    const yMax = 88;
+    const yMin = -88;
+
+    const y = (v) => {
+      const t = (v - yMin) / (yMax - yMin);
+      return padT + (1 - t) * plotH;
+    };
+
+    // grid lines
+    ctx.lineWidth = 1 * dpr;
+    ctx.strokeStyle = GRID;
+    ctx.globalAlpha = 0.55;
+    const ticks = [88, 44, 0, -44, -88];
+    for(const t of ticks){
+      const yy = Math.round(y(t)) + 0.5*dpr;
+      ctx.beginPath();
+      ctx.moveTo(padL, yy);
+      ctx.lineTo(W - padR, yy);
+      ctx.stroke();
+
+      ctx.globalAlpha = 0.9;
+      ctx.fillStyle = MUTED;
+      ctx.font = `${11*dpr}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      const label = (t===0? "0%": `${t.toFixed(0)}%`);
+      ctx.fillText(label, padL - 8*dpr, yy);
+      ctx.globalAlpha = 0.55;
+    }
+    ctx.globalAlpha = 1;
+
+    const n = Math.max(1, items?.length || 0);
+    const gap = 8 * dpr;
+    const bw = Math.max(6*dpr, Math.floor((plotW - gap*(n-1)) / n));
+    const baseY = y(0);
+
+    // bars + labels + month text
+    ctx.textAlign = "center";
+    ctx.font = `${12*dpr}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+    for(let i=0;i<n;i++){
+      const it = items[i];
+      const v = it.v;
+      const x = padL + i*(bw+gap) + bw/2;
+
+      const yy = y(v);
+      const top = Math.min(yy, baseY);
+      const bot = Math.max(yy, baseY);
+      const h = Math.max(2*dpr, bot-top);
+
+      const col = v >= 0 ? UP : DN;
+      ctx.fillStyle = col;
+
+      // rounded rect
+      const r = 6*dpr;
+      const left = x - bw/2;
+      const right = x + bw/2;
+      const tY = top;
+      const bY = top + h;
+
+      ctx.beginPath();
+      if(v >= 0){
+        // round top
+        ctx.moveTo(left, bY);
+        ctx.lineTo(left, tY + r);
+        ctx.quadraticCurveTo(left, tY, left + r, tY);
+        ctx.lineTo(right - r, tY);
+        ctx.quadraticCurveTo(right, tY, right, tY + r);
+        ctx.lineTo(right, bY);
+        ctx.closePath();
+      }else{
+        // round bottom
+        ctx.moveTo(left, tY);
+        ctx.lineTo(left, bY - r);
+        ctx.quadraticCurveTo(left, bY, left + r, bY);
+        ctx.lineTo(right - r, bY);
+        ctx.quadraticCurveTo(right, bY, right, bY - r);
+        ctx.lineTo(right, tY);
+        ctx.closePath();
+      }
+      ctx.fill();
+
+      // value label
+      ctx.fillStyle = v >= 0 ? "#EAECEF" : "#EAECEF";
+      ctx.textBaseline = v >= 0 ? "bottom" : "top";
+      const vy = v >= 0 ? (top - 6*dpr) : (bot + 6*dpr);
+      const txt = `${v.toFixed(1)}%`;
+      ctx.fillText(txt, x, vy);
+
+      // month label
+      ctx.fillStyle = MUTED;
+      ctx.textBaseline = "alphabetic";
+      ctx.font = `${12*dpr}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+      ctx.fillText(it.m, x, H - 8*dpr);
+    }
+  }
+
+
+  function openModal(title, bodyHtml, opts={}){
+    if(!overlay || !sheetTitle || !sheetBody) return;
+
+    // reset modes
+    if(sheetEl) sheetEl.classList.remove("fullscreen");
+    if(sheetHeaderEl) sheetHeaderEl.style.display = "";
+    overlay.dataset.lock = "0";
+
+    if(opts.fullscreen){
+      if(sheetEl) sheetEl.classList.add("fullscreen");
+      if(sheetHeaderEl) sheetHeaderEl.style.display = "none";
+    }
+    if(opts.lock){
+      overlay.dataset.lock = "1";
+    }
+
+    sheetTitle.textContent = title || "";
+    sheetBody.innerHTML = bodyHtml;
+    overlay.classList.remove("closing");
+    overlay.classList.add("show");
+    overlay.setAttribute("aria-hidden","false");
+  }
+
+  function closeModal(){
+    if(!overlay) return;
+    overlay.classList.add("closing");
+    overlay.setAttribute("aria-hidden","true");
+    setTimeout(() => {
+      overlay.classList.remove("show","closing");
+      overlay.dataset.lock = "0";
+      if(sheetEl) sheetEl.classList.remove("fullscreen");
+      if(sheetHeaderEl) sheetHeaderEl.style.display = "";
+    }, 170);
+  }
+
+  if(sheetClose) sheetClose.onclick = closeModal;
+  if(overlay){
+    overlay.addEventListener("click", (e) => {
+      if(e.target === overlay && overlay.dataset.lock !== "1") closeModal();
+    });
+  }
+
+  function openSettingsSheet(){
+    openModal("Настройки", `
+      <div class="setCard">
+        <div class="setTop">
+          <div class="avatar" aria-hidden="true"></div>
+          <div class="setMeta">
+            <div class="setName">${state.user.name}</div>
+            <div class="setId">ID: ${state.user.id}</div>
+          </div>
+        </div>
+
+        <button class="walletBtn" type="button" id="copyAddr">
+          <div class="wL">
+            <div class="wLbl">Wallet</div>
+            <div class="wAddr">${shortAddr(state.user.wallet)}</div>
+          </div>
+          <div class="wIcon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M9 9h10v10H9z"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/><path d="M9 5h6"/></svg>
+          </div>
+        </button>
+
+        <div class="setRow">
+          <div class="setK">Язык</div>
+          <div class="pillSeg" role="tablist" aria-label="Язык">
+            <button class="pillBtn" type="button" data-lang="ru">RU</button>
+            <button class="pillBtn" type="button" data-lang="en">EN</button>
+          </div>
+        </div>
+
+        <div class="setRow">
+          <div class="setK">Вибрация</div>
+          <div class="pillSeg" role="tablist" aria-label="Вибрация">
+            <button class="pillBtn" type="button" data-vib="on">ON</button>
+            <button class="pillBtn" type="button" data-vib="off">OFF</button>
+          </div>
+        </div>
+
+        <div class="setLinks">
+          <button class="lineBtn" type="button" id="btnGuide">
+            <span>Гайд</span>
+            <span class="chev" aria-hidden="true">›</span>
+          </button>
+          <button class="lineBtn" type="button" id="btnOnb">
+            <span>Онбординг</span>
+            <span class="chev" aria-hidden="true">›</span>
+          </button>
+        </div>
+
+        <div class="setSocial">
+          <button class="socBtn" type="button" id="socTg" aria-label="Telegram">
+            <svg viewBox="0 0 24 24"><path d="M21 5 3 12l6 2 2 6 3-4 5 4 2-15Z"/><path d="M9 14 19 7"/></svg>
+          </button>
+          <button class="socBtn" type="button" id="socSup" aria-label="Поддержка">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg>
+          </button>
+          <button class="socBtn" type="button" id="socX" aria-label="X">
+            <svg viewBox="0 0 24 24"><path d="M4 4l16 16"/><path d="M20 4 4 20"/></svg>
+          </button>
+        </div>
+      </div>
+    `);
+
+    // set active pills
+    $$(".pillBtn[data-lang]", sheetBody).forEach(b => {
+      b.classList.toggle("active", b.dataset.lang === state.user.lang);
+      b.onclick = () => { state.user.lang = b.dataset.lang; openSettingsSheet(); };
+    });
+
+    $$(".pillBtn[data-vib]", sheetBody).forEach(b => {
+      b.classList.toggle("active",
+        (b.dataset.vib === "on" && state.user.vibration) ||
+        (b.dataset.vib === "off" && !state.user.vibration)
+      );
+      b.onclick = () => { state.user.vibration = (b.dataset.vib === "on"); openSettingsSheet(); };
+    });
+
+    const copy = $("#copyAddr", sheetBody);
+    if(copy){
+      copy.onclick = async () => {
+        try{
+          await navigator.clipboard.writeText(state.user.wallet);
+          showToast("Адрес скопирован");
+        }catch(e){
+          showToast("Копирование недоступно");
+        }
+      };
+    }
+
+    const g = $("#btnGuide", sheetBody);
+    if(g) g.onclick = () => showToast("Гайд: демо");
+    const o = $("#btnOnb", sheetBody);
+    if(o) o.onclick = () => showToast("Онбординг: демо");
+
+    const tg = $("#socTg", sheetBody);
+    if(tg) tg.onclick = () => showToast("Telegram: демо");
+    const sup = $("#socSup", sheetBody);
+    if(sup) sup.onclick = () => showToast("Поддержка: демо");
+    const x = $("#socX", sheetBody);
+    if(x) x.onclick = () => showToast("X: демо");
+  }
+
+function openDepositSheet(){
+    openModal("Выбери валюту для пополнения", `
+      <div class="hintCard">
+        <div>
+          <div class="txt">Подключение кошелька TON</div>
+        </div>
+        <div class="spark" aria-hidden="true">
+          <span class="ico">
+            <svg viewBox="0 0 24 24"><path d="M13 2 3 14h8l-1 8 10-12h-8z"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="coinGrid">
+        ${coinBtn("TON","Toncoin")}
+        ${coinBtn("Stars","Telegram Stars")}
+      </div>
+    `);
+
+    $$(".coinBtn", sheetBody).forEach(btn => {
+      btn.onclick = () => {
+        const coin = btn.dataset.coin;
+        state.deposit.coin = coin;
+        renderDepositScreen(coin);
+      };
+    });
+  }
+
+  function coinBtn(sym, name){
+    return `
+      <div class="coinBtn" data-coin="${sym}">
+        <div class="coinBadge">${sym}</div>
+        <div style="min-width:0;">
+          <div class="nm">${sym}</div>
+          <div class="sm">${name}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderDepositScreen(coin){
+    if(coin === "TON"){
+      openModal("TON", `
+        <div class="screen">
+          <div class="backRow" id="depBack">
+            <div class="ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+            </div>
+            Назад
+          </div>
+
+          <div class="depTitle">
+            <div class="coinBadge">TON</div>
+            TON
+          </div>
+
+          <div class="depLine">
+            <div class="k">Сеть</div>
+            <div class="v">TON</div>
+          </div>
+
+          <div class="spacer12"></div>
+          <div class="label">Адрес для пополнения</div>
+          <div class="addrRow">
+            <div class="addr" id="addrText">${state.deposit.tonAddr}</div>
+            <div class="copybtn" id="copyAddr" title="Копировать">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M8 8h12v12H8z"/><path d="M4 4h12v12H4z"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="depLine" style="margin-top:12px;">
+            <div class="k">Минимальный депозит</div>
+            <div class="v">${state.deposit.minTon} TON</div>
+          </div>
+
+          <div class="primaryAction" id="copyBig">СКОПИРОВАТЬ АДРЕС</div>
+
+          <div class="note">Отправляй только TON на этот адрес. Это интерфейс-демо, не кошелёк и не финансовый сервис.</div>
+        </div>
+      `);
+
+      $("#depBack").onclick = () => openDepositSheet();
+
+      const doCopy = async () => {
+        const txt = state.deposit.tonAddr;
+        try{
+          await navigator.clipboard.writeText(txt);
+          showToast("Адрес скопирован");
+        }catch(e){
+          const temp = document.createElement("input");
+          temp.value = txt;
+          document.body.appendChild(temp);
+          temp.select();
+          document.execCommand("copy");
+          temp.remove();
+          showToast("Скопировано (fallback)");
+        }
+      };
+
+      $("#copyAddr").onclick = doCopy;
+      $("#copyBig").onclick = doCopy;
+      return;
+    }
+
+    if(coin === "Stars"){
+      openModal("Stars", `
+        <div class="screen">
+          <div class="backRow" id="depBack">
+            <div class="ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+            </div>
+            Назад
+          </div>
+
+          <div class="depTitle">
+            <div class="coinBadge">Stars</div>
+            Stars
+          </div>
+
+          <div class="note">Пополнение через Telegram Stars (демо). В проде здесь будет оплата Stars и подтверждение.</div>
+
+          <div class="primaryAction" id="starsPay">ОТКРЫТЬ ОПЛАТУ STARS</div>
+        </div>
+      `);
+
+      $("#depBack").onclick = () => openDepositSheet();
+      $("#starsPay").onclick = () => showToast("Stars: демо");
+      return;
+    }
+
+    // safety fallback
+    openDepositSheet();
+  }
+
+  function openWithdrawSheet(){
+    openModal("Вывод", `
+      <div class="screen">
+        <div style="font-weight:1000; font-size:16px;">Вывод средств</div>
+        <div class="note">Демо-экран. В проде сюда добавится: выбор валюты, сумма, комиссия, адрес, подтверждение.</div>
+        <div class="spacer12"></div>
+        <div class="depLine">
+          <div class="k">Доступно</div>
+          <div class="v">${fmtMoney(state.balanceUsd)}</div>
+        </div>
+        <div class="primaryAction" id="wdOk">ПОНЯТНО</div>
+      </div>
+    `);
+    $("#wdOk").onclick = closeModal;
+  }
+
+  // nav wiring
+  $$(".tab").forEach(t => t.onclick = () => setTab(t.dataset.tab));
+
+  // first render
+  render();
+})();
+</script>
+</body>
+</html>
