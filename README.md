@@ -28,3 +28,5 @@ Trading bot user interface built with vanilla JavaScript, HTML, and CSS.
 - `styles.css` - All styles
 - `script.js` - Application logic
 
+
+

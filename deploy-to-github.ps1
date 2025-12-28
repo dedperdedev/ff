@@ -40,3 +40,5 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "- Наличие интернет-соединения" -ForegroundColor Yellow
 }
 
+
+
