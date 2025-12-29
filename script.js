@@ -414,7 +414,7 @@ function renderPositions(){
         <div class="grid2">
           <div class="statcard">
             <div class="k">Текущая прибыль</div>
-            <div class="v">${state.profit.toFixed(4)} <span class="usdIcon">${tonLogoSVG(20)}</span></div>
+            <div class="v">${state.profit.toFixed(2)} <span class="usdIcon">${tonLogoSVG(20)}</span></div>
           </div>
           <div class="statcard">
             <div class="k">Активные позиции</div>
