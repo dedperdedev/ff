@@ -1408,7 +1408,6 @@ function openDepositSheet(){
         <div class="coinBadge">${sym}</div>
         <div style="min-width:0;">
           <div class="nm">${sym}</div>
-          <div class="sm">${name}</div>
         </div>
       </div>
     `;
