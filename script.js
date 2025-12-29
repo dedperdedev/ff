@@ -450,8 +450,8 @@ function renderPositions(){
   function renderTasks(){
     const tasks = [
       {t:"Ежедневный чек-ин", r:"+50 FXD", icon: `<svg viewBox="0 0 24 24"><path d="M12 17l-5 3 1.5-5.5L4 10l5.7-.3L12 4l2.3 5.7L20 10l-4.5 4.5L17 20z"/></svg>`, completed: false},
-      {t:"Пригласи 1 друга", r:"+1 спин", icon: `<svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`, completed: false},
-      {t:"Открой позицию", r:"+x2 бонус", icon: `<svg viewBox="0 0 24 24"><path d="M6 6v12"/><path d="M6 9h4"/><path d="M10 9v10"/><path d="M14 5v14"/><path d="M14 11h4"/><path d="M18 11v7"/></svg>`, completed: false},
+      {t:"Пригласи 1 друга", r:"+10 FXD", icon: `<svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`, completed: false},
+      {t:"Открой позицию", r:"+0.001 TON", icon: `<svg viewBox="0 0 24 24"><path d="M6 6v12"/><path d="M6 9h4"/><path d="M10 9v10"/><path d="M14 5v14"/><path d="M14 11h4"/><path d="M18 11v7"/></svg>`, completed: false},
     ];
 
     // Проверяем состояние заданий из state, если есть
