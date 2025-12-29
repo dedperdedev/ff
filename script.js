@@ -163,8 +163,8 @@
   }
 
   function fmtMoney(v){
-    const s = Number(v).toFixed(2);
-    return "$" + s.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    const s = Number(v).toFixed(4);
+    return s.replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " TON";
   }
   function fmtInt(v){
     const n = Math.round(Number(v) || 0);
@@ -192,19 +192,19 @@
 
 function calcPnlToday(){
     if(!state.activePositions || state.activePositions.length === 0){
-      return { usd: "0,00 $", pct: "0,00 %", cls: "muted" };
+      return { usd: "0,00 TON", pct: "0,00 %", cls: "muted" };
     }
 
     const d = state.kline;
     if(!d || d.length < 2){
-      return { usd: "0,00 $", pct: "0,00 %", cls: "muted" };
+      return { usd: "0,00 TON", pct: "0,00 %", cls: "muted" };
     }
     const start = d[0].o;
     const end = d[d.length-1].c;
     const usd = end - start;
     const pct = (usd / start) * 100;
 
-    const sUsd = (usd > 0 ? "+" : (usd < 0 ? "-" : "")) + fmtRuSmart(usd) + " $";
+    const sUsd = (usd > 0 ? "+" : (usd < 0 ? "-" : "")) + fmtRuSmart(usd) + " TON";
     const sPct = (pct > 0 ? "+" : (pct < 0 ? "-" : "")) + fmtRuSmart(pct) + " %";
     return { usd: sUsd, pct: sPct, cls: usd >= 0 ? "good" : "bad" };
   }
@@ -382,7 +382,7 @@ function renderPositions(){
     return `
       <div class="posRow">
         <div class="posLeft">
-          <div class="posCoin" aria-hidden="true">$</div>
+          <div class="posCoin" aria-hidden="true">TON</div>
           <div class="posAmt">${fmtMoney(p.amount)}</div>
         </div>
         <div class="posRight">
@@ -406,7 +406,7 @@ function renderPositions(){
         <div class="grid2">
           <div class="statcard">
             <div class="k">Текущая прибыль</div>
-            <div class="v"><span class="usdIcon">$</span> ${state.profit.toFixed(2)}</div>
+            <div class="v"><span class="usdIcon">TON</span> ${state.profit.toFixed(4)}</div>
           </div>
           <div class="statcard">
             <div class="k">Активные позиции</div>
@@ -588,9 +588,8 @@ function renderPositions(){
       <div class="depAmtWrap">
         <div class="depAmtInputRow">
           <input class="depAmtInput" id="depAmtInput" inputmode="decimal" placeholder="Введите сумму депозита" autocomplete="off">
-          <div class="cur">$</div>
+          <div class="cur">TON</div>
         </div>
-        <div class="depHint">от $0.5</div>
 
         <button class="depCreateBtn" type="button" id="depCreateOk">Открыть позицию</button>
       </div>
