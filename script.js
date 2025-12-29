@@ -337,7 +337,7 @@ function calcPnlToday(){
           </div>
         </div>
 
-        <div class="balance" style="display:flex; align-items:center; gap:8px;">${balText}${hidden ? "" : tonLogoSVG(44)}</div>
+        <div class="balance" style="display:flex; align-items:baseline; gap:8px;">${balText}${hidden ? "" : tonLogoSVG(46)}</div>
         <div class="subBalance">${fxdText}</div>
 <div class="pnlrow" id="pnlTodayRow" title="PnL за сегодня">
           <div class="pnl-label">PnL за сегодня</div>

@@ -283,6 +283,12 @@
       letter-spacing:-1.0px;
       margin-top: 10px;
     }
+    .balance svg{
+      width: 46px;
+      height: 46px;
+      flex-shrink: 0;
+      vertical-align: baseline;
+    }
     .subline{
       display:flex; align-items:center; gap:8px;
       font-size:12px;
