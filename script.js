@@ -258,7 +258,6 @@ function calcPnlToday(){
     if(tab === "positions"){
       ensureKlineTimer();
       ensurePositionTimer();
-      ensurePositionTimer();
     } else {
       stopKlineTimer();
       stopPositionTimer();
