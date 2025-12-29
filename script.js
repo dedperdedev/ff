@@ -86,7 +86,7 @@
     chart: [12, 14, 13, 18, 22, 25, 28, 33, 41, 46, 52, 61, 72, 80],
         virtualDeposit: 0.0,
     createDepositAmt: null,
-    kline: genKlineSeries(725, 48, 1337),
+    kline: genKlineSeries(0.0, 48, 1337),
     tf: "12h",
     monthPerf: genMonthlyPerf(1337),
     deals: [
