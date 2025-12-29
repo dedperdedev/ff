@@ -337,7 +337,7 @@ function calcPnlToday(){
           </div>
         </div>
 
-        <div class="balance" style="display:flex; align-items:center; gap:8px;">${balText}${hidden ? "" : tonLogoSVG(32)}</div>
+        <div class="balance" style="display:flex; align-items:center; gap:8px;">${balText}${hidden ? "" : tonLogoSVG(44)}</div>
         <div class="subBalance">${fxdText}</div>
 <div class="pnlrow" id="pnlTodayRow" title="PnL за сегодня">
           <div class="pnl-label">PnL за сегодня</div>
@@ -414,7 +414,7 @@ function renderPositions(){
         <div class="grid2">
           <div class="statcard">
             <div class="k">Текущая прибыль</div>
-            <div class="v">${state.profit.toFixed(2)} <span class="usdIcon">${tonLogoSVG(20)}</span></div>
+            <div class="v">${state.profit.toFixed(2)} <span class="usdIcon">${tonLogoSVG(26)}</span></div>
           </div>
           <div class="statcard">
             <div class="k">Активные позиции</div>
