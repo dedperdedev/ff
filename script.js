@@ -449,7 +449,7 @@ function renderPositions(){
         <div class="grid2">
           <div class="statcard">
             <div class="k">Текущая прибыль</div>
-            <div class="v">${state.profit.toFixed(2)} <span class="usdIcon">${tonLogoSVG(26)}</span></div>
+            <div class="v ${state.profit >= 0 ? 'profitGood' : 'profitBad'}">${state.profit >= 0 ? '' : '-'}${Math.abs(state.profit).toFixed(2)} <span class="usdIcon">${tonLogoSVG(26)}</span></div>
           </div>
           <div class="statcard">
             <div class="k">Активные позиции</div>

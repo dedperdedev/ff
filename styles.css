@@ -412,6 +412,12 @@
       letter-spacing:-.6px;
       display:flex; align-items:center; gap:8px;
     }
+    .statcard .v.profitGood{
+      color: var(--pnlGreen);
+    }
+    .statcard .v.profitBad{
+      color: var(--bad);
+    }
     .statcard .v .mini{ font-size:12px; color:var(--muted); font-weight:800; letter-spacing:0; }
 
     .list{
