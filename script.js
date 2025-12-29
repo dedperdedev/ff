@@ -269,9 +269,9 @@ function calcPnlToday(){
     if(positionTimer) return;
     positionTimer = setInterval(() => {
       if(state.tab === "positions" && state.activePositions.length > 0){
-        render();
+        updatePositionsProfit();
       }
-    }, 1000);
+    }, 2000);
   }
 
   function stopPositionTimer(){
