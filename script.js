@@ -570,7 +570,7 @@ function renderPositions(){
     });
 
     // totals
-    state.profit = state.activePositions.reduce((acc, p) => acc + (p.amount * (p.pct/100)), 0);
+    state.profit = state.activePositions.length > 0 ? state.activePositions.reduce((acc, p) => acc + (p.amount * (p.pct/100)), 0) : 0.0;
     state.balanceUsd = state.activePositions.length > 0 ? state.activePositions.reduce((acc, p) => acc + p.amount, 0) : 0.0;
     state.virtualDeposit = state.balanceUsd;
 
