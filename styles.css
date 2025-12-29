@@ -1562,7 +1562,7 @@
     .depAmtInput::placeholder{ color: rgba(132,142,156,.9); font-weight:900; }
     .depAmtInputRow .cur{ color: var(--muted); font-weight:900; font-size:12px; white-space:nowrap; display: flex; align-items: center; }
     .depAmtInputRow .cur svg{ width: 20px; height: 20px; flex-shrink: 0; display: block; }
-    .depAmtInputRow .cur svg path{ fill: #08C; }
+    .depAmtInputRow .cur svg path{ fill: #FFFFFF; }
 
     .depHint{
       text-align:center;
@@ -1643,7 +1643,7 @@
   display:block;
 }
 .posCoin svg path{
-  fill: var(--accent2);
+  fill: #FFFFFF;
 }
 .posAmt{
   font-weight:1000;

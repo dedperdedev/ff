@@ -1424,7 +1424,7 @@ function openDepositSheet(){
         <div class="spacer12"></div>
         <div class="depAmtInputRow">
           <input class="depAmtInput" id="depAmtInput" inputmode="decimal" placeholder="Введите сумму пополнения" autocomplete="off">
-          <div class="coinBadge"><img src="https://ton.org/download/ton_symbol.svg" alt="TON" style="width:100%;height:100%;object-fit:contain;" /></div>
+          <div class="cur">${tonLogoSVG(20)}</div>
         </div>
 
         <div class="spacer12"></div>
