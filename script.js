@@ -414,7 +414,7 @@ function renderPositions(){
         <div class="grid2">
           <div class="statcard">
             <div class="k">Текущая прибыль</div>
-            <div class="v"><span class="usdIcon">${tonLogoSVG(20)}</span> ${state.profit.toFixed(4)}</div>
+            <div class="v"><span class="usdIcon">${tonLogoSVG(26)}</span> ${state.profit.toFixed(4)}</div>
           </div>
           <div class="statcard">
             <div class="k">Активные позиции</div>
@@ -596,7 +596,7 @@ function renderPositions(){
       <div class="depAmtWrap">
         <div class="depAmtInputRow">
           <input class="depAmtInput" id="depAmtInput" inputmode="decimal" placeholder="Введите сумму депозита" autocomplete="off">
-          <div class="cur">${tonLogoSVG(20)}</div>
+          <div class="cur">${tonLogoSVG(12)}</div>
         </div>
 
         <button class="depCreateBtn" type="button" id="depCreateOk">Открыть позицию</button>
