@@ -1553,7 +1553,8 @@
       letter-spacing:-.2px;
     }
     .depAmtInput::placeholder{ color: rgba(132,142,156,.9); font-weight:900; }
-    .depAmtInputRow .cur{ color: var(--muted); font-weight:900; font-size:12px; white-space:nowrap; }
+    .depAmtInputRow .cur{ color: var(--muted); font-weight:900; font-size:12px; white-space:nowrap; display: flex; align-items: center; }
+    .depAmtInputRow .cur svg{ width: 20px; height: 20px; flex-shrink: 0; }
 
     .depHint{
       text-align:center;
