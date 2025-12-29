@@ -318,7 +318,8 @@
     .pnl-val.good{ color: var(--pnlGreen); }
     .pnl-val.bad{ color: var(--bad); }
     .usdIcon{ color: var(--pnlGreen); font-weight:1000; display: inline-flex; align-items: center; }
-    .usdIcon svg{ width: 20px; height: 20px; flex-shrink: 0; }
+    .usdIcon svg{ width: 20px; height: 20px; flex-shrink: 0; display: block; }
+    .usdIcon svg path{ fill: var(--pnlGreen); }
     .pill{
       display:inline-flex;
       gap:6px;
@@ -1554,7 +1555,8 @@
     }
     .depAmtInput::placeholder{ color: rgba(132,142,156,.9); font-weight:900; }
     .depAmtInputRow .cur{ color: var(--muted); font-weight:900; font-size:12px; white-space:nowrap; display: flex; align-items: center; }
-    .depAmtInputRow .cur svg{ width: 20px; height: 20px; flex-shrink: 0; }
+    .depAmtInputRow .cur svg{ width: 20px; height: 20px; flex-shrink: 0; display: block; }
+    .depAmtInputRow .cur svg path{ fill: var(--muted); }
 
     .depHint{
       text-align:center;
@@ -1632,6 +1634,10 @@
   width:20px;
   height:20px;
   flex-shrink:0;
+  display:block;
+}
+.posCoin svg path{
+  fill: var(--accent2);
 }
 .posAmt{
   font-weight:1000;
