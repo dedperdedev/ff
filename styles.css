@@ -1672,7 +1672,25 @@
 }
 .posPct{ color:var(--accent2); }
 .posPct.bad{ color:var(--bad); }
-.posTime{ color:rgba(255,255,255,.78); min-width:66px; }
+.posTime{ color:rgba(255,255,255,.78); min-width:80px; font-family: var(--numFont); }
+.posClaim{
+  background: var(--lime);
+  color: #0B0E11;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-weight: 1000;
+  font-size: 12px;
+  cursor: pointer;
+  min-width: 100px;
+  transition: transform .08s ease;
+}
+.posClaim:hover{
+  transform: scale(1.05);
+}
+.posClaim:active{
+  transform: scale(0.95);
+}
 
     .taskCard{
       border:1px solid var(--border-base);

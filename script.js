@@ -391,17 +391,25 @@ function renderCreateHero(){
   }
 
 function renderPositions(){
-    const items = state.activePositions.map(p => {
+    const items = state.activePositions.map((p, idx) => {
     const cls = p.pct >= 0 ? "good" : "bad";
+    const remaining = p.createdAt ? getTimeRemaining(p.createdAt) : 0;
+    const isExpired = remaining <= 0;
+    const timerText = isExpired ? "00:00:00" : formatCountdown(remaining);
+    
     return `
-      <div class="posRow">
+      <div class="posRow" data-pos-id="${p.id}">
         <div class="posLeft">
           <div class="posCoin" aria-hidden="true">${tonLogoSVG(20)}</div>
           <div class="posAmt">${fmtMoney(p.amount)}</div>
         </div>
         <div class="posRight">
           <div class="posPill posPct ${cls}">${fmtPct(p.pct)}</div>
-          <div class="posPill posTime">${p.time}</div>
+          ${isExpired && !p.claimed ? `
+            <button class="posPill posClaim" data-pos-idx="${idx}">Клейм прибыли</button>
+          ` : `
+            <div class="posPill posTime" data-timer="${p.id}">${timerText}</div>
+          `}
         </div>
       </div>
     `;
@@ -562,6 +570,23 @@ function renderPositions(){
   }
 
 
+  function formatCountdown(ms){
+    if(ms <= 0) return "00:00:00";
+    const totalSeconds = Math.floor(ms / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    return `${String(hours).padStart(2,"0")}:${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
+  }
+
+  function getTimeRemaining(createdAt){
+    const now = Date.now();
+    const elapsed = now - createdAt;
+    const duration = 24 * 60 * 60 * 1000; // 24 часа в миллисекундах
+    const remaining = duration - elapsed;
+    return remaining;
+  }
+
   function addDemoPosition(amount){
     const amt = Math.max(0, Number(amount) || 0);
 
@@ -575,8 +600,10 @@ function renderPositions(){
       id: Math.random(),
       amount: amt,
       pct: pct,
+      createdAt: Date.now(),
       time: `${hh}:${mm}`,
-      status: pct < 0 ? "bolt" : "ok"
+      status: pct < 0 ? "bolt" : "ok",
+      claimed: false
     });
 
     // totals
@@ -702,6 +729,28 @@ if(btnSettings) btnSettings.onclick = () => openSettingsSheet();
 
     if(btnCreate) btnCreate.onclick = openCreateDepositSheet;
     if(btnCreateHero) btnCreateHero.onclick = openCreateDepositSheet;
+
+    // Handle claim profit buttons
+    $$(".posClaim").forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const idx = parseInt(btn.dataset.posIdx);
+        const pos = state.activePositions[idx];
+        if(pos && !pos.claimed){
+          // Claim profit
+          pos.claimed = true;
+          const profit = pos.amount * (pos.pct/100);
+          showToast(`Прибыль ${fmtMoney(profit)} TON получена`);
+          
+          // Restart position
+          pos.createdAt = Date.now();
+          pos.claimed = false;
+          pos.pct = (Math.random() * 10) - 5;
+          
+          render();
+        }
+      };
+    });
 
     // task actions
     $$(".taskCard").forEach(card => {
