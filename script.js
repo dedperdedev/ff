@@ -76,15 +76,15 @@
 
   const state = {
     tab: "positions",
-    balanceUsd: 0,
+    balanceUsd: 0.0,
     uf: 9500,
     hideBalance: false,
     // demo data
-    profit: 0,
+    profit: 0.0,
     activePositions: [],
     positionsAlt: true,
     chart: [12, 14, 13, 18, 22, 25, 28, 33, 41, 46, 52, 61, 72, 80],
-        virtualDeposit: 725,
+        virtualDeposit: 0.0,
     createDepositAmt: null,
     kline: genKlineSeries(725, 48, 1337),
     tf: "12h",
@@ -333,7 +333,7 @@ function calcPnlToday(){
           </div>
         </div>
 
-        <div class="balance" style="display:flex; align-items:center; gap:8px;">${hidden ? "" : tonLogoSVG(32)}${balText}</div>
+        <div class="balance" style="display:flex; align-items:center; gap:8px;">${hidden ? "" : tonLogoSVG(44)}${balText}</div>
         <div class="subBalance">${fxdText}</div>
 <div class="pnlrow" id="pnlTodayRow" title="PnL за сегодня">
           <div class="pnl-label">PnL за сегодня</div>
@@ -571,7 +571,7 @@ function renderPositions(){
 
     // totals
     state.profit = state.activePositions.reduce((acc, p) => acc + (p.amount * (p.pct/100)), 0);
-    state.balanceUsd = state.activePositions.reduce((acc, p) => acc + p.amount, 0);
+    state.balanceUsd = state.activePositions.length > 0 ? state.activePositions.reduce((acc, p) => acc + p.amount, 0) : 0.0;
     state.virtualDeposit = state.balanceUsd;
 
     // regenerate kline so PnL feels tied to deposit size
