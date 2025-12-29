@@ -167,7 +167,11 @@
   }
 
   function fmtMoney(v){
-    const s = Number(v).toFixed(4);
+    const num = Number(v);
+    if (num === 0) {
+      return "0.0";
+    }
+    const s = num.toFixed(4);
     return s.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   }
   function fmtInt(v){
