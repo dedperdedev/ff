@@ -133,7 +133,6 @@
     deposit: {
   coin: null,
   tonAddr: "UQB7kYHhF1gY8q3xj7cVJr2yQvCq1eQ9k2XJcZr7V1z0pW8s",
-  minTon: 0.001,
   starsToTonRate: 0.001 // 1 Star = 0.001 TON (примерный курс)
 }
   };
@@ -551,10 +550,6 @@ function renderPositions(){
 
   function addDemoPosition(amount){
     const amt = Math.max(0, Number(amount) || 0);
-    if(amt < 0.001){
-      showToast("Минимальный депозит 0.001 TON");
-      return;
-    }
 
     const now = new Date();
     const hh = String(now.getHours()).padStart(2,"0");
@@ -1453,10 +1448,6 @@ function openDepositSheet(){
         const num = Number(cleaned);
         if(!Number.isFinite(num) || num <= 0){
           showToast("Введите сумму");
-          return;
-        }
-        if(num < state.deposit.minTon){
-          showToast(`Минимальный депозит ${state.deposit.minTon} TON`);
           return;
         }
         showToast("Пополнение TON (демо)");
