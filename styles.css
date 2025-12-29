@@ -319,7 +319,7 @@
     .pnl-val.bad{ color: var(--bad); }
     .usdIcon{ color: var(--pnlGreen); font-weight:1000; display: inline-flex; align-items: center; gap: 6px; }
     .usdIcon svg{ width: 20px; height: 20px; flex-shrink: 0; display: block; }
-    .usdIcon svg path{ fill: #0088CC; }
+    .usdIcon svg path{ fill: #FFFFFF; }
     .pill{
       display:inline-flex;
       gap:6px;
