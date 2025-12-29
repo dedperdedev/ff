@@ -1404,7 +1404,7 @@ function openDepositSheet(){
 
   function coinBtn(sym, name){
     const logo = sym === "TON" 
-      ? `<img src="https://brandfetch.com/ton.org/logo.svg" alt="TON" style="width:100%;height:100%;object-fit:contain;" />`
+      ? `<img src="https://ton.org/download/ton_symbol.svg" alt="TON" style="width:100%;height:100%;object-fit:contain;" />`
       : sym;
     return `
       <div class="coinBtn" data-coin="${sym}">
@@ -1422,7 +1422,7 @@ function openDepositSheet(){
         <div class="spacer12"></div>
         <div class="depAmtInputRow">
           <input class="depAmtInput" id="depAmtInput" inputmode="decimal" placeholder="Введите сумму пополнения" autocomplete="off">
-          <div class="coinBadge"><img src="https://brandfetch.com/ton.org/logo.svg" alt="TON" style="width:100%;height:100%;object-fit:contain;" /></div>
+          <div class="coinBadge"><img src="https://ton.org/download/ton_symbol.svg" alt="TON" style="width:100%;height:100%;object-fit:contain;" /></div>
         </div>
 
         <div class="spacer12"></div>
