@@ -168,7 +168,7 @@
 
   function fmtMoney(v){
     const s = Number(v).toFixed(4);
-    return s.replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " TON";
+    return s.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   }
   function fmtInt(v){
     const n = Math.round(Number(v) || 0);
