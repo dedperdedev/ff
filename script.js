@@ -490,7 +490,6 @@ function renderPositions(){
     const t = state.team;
     const selectedLevel = t.selectedLevel || 1;
     const currentReferrals = t.referrals[`lvl${selectedLevel}`] || [];
-    const totalEarned = currentReferrals.reduce((sum, r) => sum + r.earned, 0).toFixed(2);
 
     return `
       ${renderTopCard()}
@@ -514,6 +513,7 @@ function renderPositions(){
             <div class="refLevelBadge">1 уровень</div>
             <div class="refLevelContent">
               <div class="refLevelNumber">${t.lvl1.people}</div>
+              <div class="refLevelPct">${t.lvl1.pct.toFixed(2)}%</div>
             </div>
           </div>
 
@@ -521,6 +521,7 @@ function renderPositions(){
             <div class="refLevelBadge">2 уровень</div>
             <div class="refLevelContent">
               <div class="refLevelNumber">${t.lvl2.people}</div>
+              <div class="refLevelPct">${t.lvl2.pct.toFixed(2)}%</div>
             </div>
           </div>
 
@@ -528,13 +529,9 @@ function renderPositions(){
             <div class="refLevelBadge">3 уровень</div>
             <div class="refLevelContent">
               <div class="refLevelNumber">${t.lvl3.people}</div>
+              <div class="refLevelPct">${t.lvl3.pct.toFixed(2)}%</div>
             </div>
           </div>
-        </div>
-
-        <div class="refSectionHeader">
-          <div class="refSectionTitle">Рефералы ${selectedLevel} уровня</div>
-          <div class="refSectionEarned">$${totalEarned}</div>
         </div>
 
         <div class="refList">
@@ -542,7 +539,6 @@ function renderPositions(){
             <div class="refItem">
               <div class="refAvatar">${ref.avatar}</div>
               <div class="refName">${ref.name}</div>
-              <div class="refEarned">$${ref.earned.toFixed(2)}</div>
             </div>
           `).join("") : `
             <div class="refEmpty">Нет рефералов на этом уровне</div>
