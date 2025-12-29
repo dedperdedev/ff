@@ -171,8 +171,14 @@
     if (num === 0) {
       return "0.0";
     }
-    const s = num.toFixed(4);
-    return s.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    // Убираем лишние нули после запятой
+    const s = num.toString();
+    // Если число целое, показываем без точки
+    if (num % 1 === 0) {
+      return num.toString();
+    }
+    // Убираем лишние нули в конце
+    return num.toString().replace(/\.?0+$/, '');
   }
   function fmtInt(v){
     const n = Math.round(Number(v) || 0);
