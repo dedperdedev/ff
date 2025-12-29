@@ -1729,11 +1729,11 @@
       align-items:center; 
       justify-content:space-between;
       gap: var(--gap-md);
-      padding: 20px;
+      padding: 14px 16px;
     }
     .taskIcon{
-      width:48px; 
-      height:48px; 
+      width:36px; 
+      height:36px; 
       border-radius: var(--gap-sm);
       display:flex; 
       align-items:center; 
@@ -1744,8 +1744,8 @@
       margin:0;
     }
     .taskIcon svg{ 
-      width:24px; 
-      height:24px; 
+      width:18px; 
+      height:18px; 
       stroke:currentColor; 
       fill:none; 
       stroke-width:2; 
@@ -1755,7 +1755,7 @@
     .taskTitle{
       flex:1;
       font-weight:1000; 
-      font-size:18px;
+      font-size:15px;
       line-height:1.1;
       color: var(--text);
       margin:0;
@@ -1767,7 +1767,7 @@
       justify-content:center;
       gap: var(--gap-sm);
       font-weight:1000;
-      font-size:16px;
+      font-size:14px;
       line-height:1.2;
       color: var(--accent);
       margin:0;
@@ -1810,7 +1810,7 @@
       background:transparent;
       color: var(--accent);
       font-weight:1000;
-      font-size:16px;
+      font-size:15px;
       cursor:pointer;
       opacity: 0;
       overflow: hidden;
@@ -1819,9 +1819,9 @@
       transition: max-height .3s ease, height .3s ease, padding .3s ease, opacity .3s ease, background .15s ease, border-top-width .3s ease, border-top-color .3s ease, border-radius .3s ease;
     }
     .taskCard.expanded .taskBtn{
-      max-height: 70px;
+      max-height: 65px;
       height: auto;
-      padding: 16px var(--gap-lg);
+      padding: 14px var(--gap-lg);
       border-top: 1px solid var(--border-base);
       border-radius: 0 0 var(--radius-md) var(--radius-md) !important;
       opacity: 1;
