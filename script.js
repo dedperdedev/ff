@@ -138,7 +138,7 @@
   };
 
   function tonLogoSVG(size = 24){
-    return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24"><path fill="#FFFFFF" d="M19.011 9.201L12.66 19.316a.857.857 0 0 1-1.453-.005L4.98 9.197a1.8 1.8 0 0 1-.266-.943a1.856 1.856 0 0 1 1.881-1.826h10.817c1.033 0 1.873.815 1.873 1.822c0 .334-.094.664-.274.951M6.51 8.863l4.632 7.144V8.143H6.994c-.48 0-.694.317-.484.72m6.347 7.144l4.633-7.144c.214-.403-.005-.72-.485-.72h-4.148z"/></svg>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24"><path fill="#08C" d="M19.011 9.201L12.66 19.316a.857.857 0 0 1-1.453-.005L4.98 9.197a1.8 1.8 0 0 1-.266-.943a1.856 1.856 0 0 1 1.881-1.826h10.817c1.033 0 1.873.815 1.873 1.822c0 .334-.094.664-.274.951M6.51 8.863l4.632 7.144V8.143H6.994c-.48 0-.694.317-.484.72m6.347 7.144l4.633-7.144c.214-.403-.005-.72-.485-.72h-4.148z"/></svg>`;
   }
 
   const icons = {
@@ -337,7 +337,7 @@ function calcPnlToday(){
           </div>
         </div>
 
-        <div class="balance" style="display:flex; align-items:baseline; gap:8px;">${balText}${hidden ? "" : tonLogoSVG(46)}</div>
+        <div class="balance" style="display:flex; align-items:center; gap:8px;">${hidden ? "" : tonLogoSVG(32)}${balText}</div>
         <div class="subBalance">${fxdText}</div>
 <div class="pnlrow" id="pnlTodayRow" title="PnL за сегодня">
           <div class="pnl-label">PnL за сегодня</div>
@@ -414,7 +414,7 @@ function renderPositions(){
         <div class="grid2">
           <div class="statcard">
             <div class="k">Текущая прибыль</div>
-            <div class="v"><span class="usdIcon">${tonLogoSVG(26)}</span> ${state.profit.toFixed(4)}</div>
+            <div class="v"><span class="usdIcon">${tonLogoSVG(20)}</span> ${state.profit.toFixed(4)}</div>
           </div>
           <div class="statcard">
             <div class="k">Активные позиции</div>
@@ -596,7 +596,7 @@ function renderPositions(){
       <div class="depAmtWrap">
         <div class="depAmtInputRow">
           <input class="depAmtInput" id="depAmtInput" inputmode="decimal" placeholder="Введите сумму депозита" autocomplete="off">
-          <div class="cur">${tonLogoSVG(12)}</div>
+          <div class="cur">${tonLogoSVG(20)}</div>
         </div>
 
         <button class="depCreateBtn" type="button" id="depCreateOk">Открыть позицию</button>
