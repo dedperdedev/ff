@@ -1728,12 +1728,12 @@
       display:flex; 
       align-items:center; 
       justify-content:space-between;
-      gap: var(--gap-sm);
-      padding: var(--gap-sm) var(--gap-lg);
+      gap: var(--gap-md);
+      padding: 20px;
     }
     .taskIcon{
-      width:28px; 
-      height:28px; 
+      width:48px; 
+      height:48px; 
       border-radius: var(--gap-sm);
       display:flex; 
       align-items:center; 
@@ -1744,8 +1744,8 @@
       margin:0;
     }
     .taskIcon svg{ 
-      width:14px; 
-      height:14px; 
+      width:24px; 
+      height:24px; 
       stroke:currentColor; 
       fill:none; 
       stroke-width:2; 
@@ -1755,7 +1755,7 @@
     .taskTitle{
       flex:1;
       font-weight:1000; 
-      font-size:13px;
+      font-size:18px;
       line-height:1.1;
       color: var(--text);
       margin:0;
