@@ -317,7 +317,8 @@
     .pnl-val .pnl-pct{ font-weight:800; opacity:.92; }
     .pnl-val.good{ color: var(--pnlGreen); }
     .pnl-val.bad{ color: var(--bad); }
-    .usdIcon{ color: var(--pnlGreen); font-weight:1000; }
+    .usdIcon{ color: var(--pnlGreen); font-weight:1000; display: inline-flex; align-items: center; }
+    .usdIcon svg{ width: 20px; height: 20px; flex-shrink: 0; }
     .pill{
       display:inline-flex;
       gap:6px;
@@ -1625,6 +1626,11 @@
   color:var(--accent2);
   font-weight:1000;
   line-height:1;
+}
+.posCoin svg{
+  width:20px;
+  height:20px;
+  flex-shrink:0;
 }
 .posAmt{
   font-weight:1000;
