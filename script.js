@@ -1004,6 +1004,24 @@ if(btnSettings) btnSettings.onclick = () => openSettingsSheet();
     `;
   }
 
+  function updatePositionsProfit(){
+    if(state.activePositions.length === 0) return;
+    
+    // Обновляем проценты позиций (небольшие изменения)
+    state.activePositions.forEach(p => {
+      const change = (Math.random() - 0.5) * 0.3; // небольшие изменения
+      p.pct = Math.max(-10, Math.min(10, p.pct + change));
+    });
+    
+    // Пересчитываем общую прибыль
+    state.profit = state.activePositions.reduce((acc, p) => acc + (p.amount * (p.pct/100)), 0);
+    
+    // Обновляем отображение если открыта вкладка позиций
+    if(state.tab === "positions"){
+      render();
+    }
+  }
+
   function stepKline(){
     const d = state.kline;
     if(!d || d.length < 5) return;
@@ -1015,6 +1033,9 @@ if(btnSettings) btnSettings.onclick = () => openSettingsSheet();
 
     const jitter = (Math.random() - 0.5) * 0.45; // percent
     const c = base * (1 + jitter/100);
+    
+    // Обновляем прибыль позиций вместе с графиком
+    updatePositionsProfit();
 
     last.c = c;
     last.h = Math.max(last.h, c, o);
