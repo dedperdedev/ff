@@ -90,8 +90,8 @@
     tf: "12h",
     monthPerf: genMonthlyPerf(1337),
     deals: [
-      {sym: "Uniswap (UNI)", dir: "Long (x5)", pct: 3.15, when: "10 Р°РІРі 2025, 03:45"},
-      {sym: "Ethereum (ETH)", dir: "Long (x5)", pct: 5.05, when: "09 Р°РІРі 2025, 17:06"},
+      {sym: "Uniswap (UNI)", dir: "Long (x5)", pct: 3.15, when: "10 авг 2025, 03:45"},
+      {sym: "Ethereum (ETH)", dir: "Long (x5)", pct: 5.05, when: "09 авг 2025, 17:06"},
     ],
         user: {
       name: "username",
@@ -109,9 +109,9 @@
       total: 54,
       active: 54,
       inactive: 0,
-      lvl1: { people: 51, pct: 5.00, reward: "+2 PLS / Р·Р° РґСЂСѓРіР°" },
-      lvl2: { people: 3, pct: 3.00, reward: "*СЂРµС„С‹ С‚РІРѕРµРіРѕ РґСЂСѓРіР°" },
-      lvl3: { people: 13, pct: 2.00, reward: "*СЂРµС„С‹ 2-РіРѕ СѓСЂРѕРІРЅСЏ" },
+      lvl1: { people: 51, pct: 5.00, reward: "+2 PLS / за друга" },
+      lvl2: { people: 3, pct: 3.00, reward: "*рефы твоего друга" },
+      lvl3: { people: 13, pct: 2.00, reward: "*рефы 2-го уровня" },
       referrals: {
         lvl1: [
           { name: "SpeedDial189", earned: 0.62, avatar: "S" },
@@ -134,7 +134,7 @@
   coin: null,
   tonAddr: "UQB7kYHhF1gY8q3xj7cVJr2yQvCq1eQ9k2XJcZr7V1z0pW8s",
   minTon: 0.5,
-  starsToTonRate: 0.001 // 1 Star = 0.001 TON (РїСЂРёРјРµСЂРЅС‹Р№ РєСѓСЂСЃ)
+  starsToTonRate: 0.001 // 1 Star = 0.001 TON (примерный курс)
 }
   };
 
@@ -142,10 +142,10 @@
     coins: {
       USDT: coinSVG("T"),
       BNB: coinSVG("B"),
-      BTC: coinSVG("в‚ї"),
-      ETH: coinSVG("в—‡"),
+      BTC: coinSVG("₿"),
+      ETH: coinSVG("◇"),
       TON: coinSVG("V"),
-      LTC: coinSVG("ЕЃ"),
+      LTC: coinSVG("Ł"),
       USDC: coinSVG("$"),
     }
   };
@@ -188,7 +188,7 @@
     if(!addr) return "";
     const s = String(addr);
     if(s.length <= 14) return s;
-    return s.slice(0,6) + "вЂ¦" + s.slice(-4);
+    return s.slice(0,6) + "…" + s.slice(-4);
   }
 
 function calcPnlToday(){
@@ -298,8 +298,8 @@ function calcPnlToday(){
   function renderTopCard(){
     const pnl = calcPnlToday();
     const hidden = !!state.hideBalance;
-    const balText = hidden ? "вЂўвЂўвЂўвЂўвЂўвЂў" : fmtMoney(state.balanceUsd);
-    const fxdText = hidden ? "вЂўвЂўвЂўвЂўвЂў FXD" : `${state.uf.toLocaleString("ru-RU")} FXD`;
+    const balText = hidden ? "••••••" : fmtMoney(state.balanceUsd);
+    const fxdText = hidden ? "••••• FXD" : `${state.uf.toLocaleString("ru-RU")} FXD`;
 
     const eyeSvg = hidden
       ? `<svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><path d="M4 4l16 16"/></svg>`
@@ -309,20 +309,20 @@ function calcPnlToday(){
       <div class="topcard">
         <div class="tophead">
           <div class="topheadL">
-            <div class="topTitle">РњРѕР№ Р±Р°Р»Р°РЅСЃ</div>
-            <button type="button" class="eyeBtn" id="btnEye" title="${hidden ? "РџРѕРєР°Р·Р°С‚СЊ" : "РЎРєСЂС‹С‚СЊ"}">
+            <div class="topTitle">Мой баланс</div>
+            <button type="button" class="eyeBtn" id="btnEye" title="${hidden ? "Показать" : "Скрыть"}">
               <span class="ico" aria-hidden="true">${eyeSvg}</span>
             </button>
           </div>
 
           <div class="row" style="gap:8px;">
-            <div class="iconbtn" id="btnSupport" title="РџРѕРґРґРµСЂР¶РєР°">
+            <div class="iconbtn" id="btnSupport" title="Поддержка">
               <span class="ico" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M4 12v6a2 2 0 0 0 2 2h1v-8H6a2 2 0 0 0-2 2Z"/><path d="M20 12v6a2 2 0 0 1-2 2h-1v-8h1a2 2 0 0 1 2 2Z"/><path d="M18 19a3 3 0 0 1-3 3h-3"/><path d="M12 22h-2"/></svg>
               </span>
             </div>
 
-            <div class="iconbtn" id="btnSettings" title="РќР°СЃС‚СЂРѕР№РєРё">
+            <div class="iconbtn" id="btnSettings" title="Настройки">
               <span class="ico" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.08a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.51a2 2 0 0 1 1-1.73l.15-.08a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2Z"/><circle cx="12" cy="12" r="3"/></svg>
               </span>
@@ -332,8 +332,8 @@ function calcPnlToday(){
 
         <div class="balance">${balText}</div>
         <div class="subBalance">${fxdText}</div>
-<div class="pnlrow" id="pnlTodayRow" title="PnL Р·Р° СЃРµРіРѕРґРЅСЏ">
-          <div class="pnl-label">PnL Р·Р° СЃРµРіРѕРґРЅСЏ</div>
+<div class="pnlrow" id="pnlTodayRow" title="PnL за сегодня">
+          <div class="pnl-label">PnL за сегодня</div>
           <div class="pnl-val ${pnl.cls}">${pnl.usd} <span class="pnl-pct">(${pnl.pct})</span></div>
         </div>
 
@@ -342,13 +342,13 @@ function calcPnlToday(){
             <span class="ico" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/></svg>
             </span>
-            РџРѕРїРѕР»РЅРёС‚СЊ
+            Пополнить
           </div>
           <div class="btn ghost" id="btnWithdraw">
             <span class="ico" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M12 21V9"/><path d="M7 14l5-5 5 5"/><path d="M4 3h16"/></svg>
             </span>
-            Р’С‹РІРµСЃС‚Рё
+            Вывести
           </div>
         </div>
       </div>
@@ -362,12 +362,12 @@ function renderCreateHero(){
     return `
       <div class="section">
         <div class="createHero">
-          <div class="createHeroTitle">РћС‚РєСЂРѕР№ СЃРІРѕСЋ РїРѕР·РёС†РёСЋ Рё Р·Р°СЂР°Р±Р°С‚С‹РІР°Р№ РґРѕ 30% РїСЂРёР±С‹Р»Рё.</div>
+          <div class="createHeroTitle">Открой свою позицию и зарабатывай до 30% прибыли.</div>
           <div class="createHeroArrow" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
           </div>
           <button class="createHeroBtn" type="button" id="btnCreatePosHero">
-            <span>РћС‚РєСЂС‹С‚СЊ РїРѕР·РёС†РёСЋ</span>
+            <span>Открыть позицию</span>
             <span class="bubble" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 6v12"/><path d="M6 12h12"/></svg>
             </span>
@@ -396,7 +396,7 @@ function renderPositions(){
 
     const makeAlt = (state.positionsAlt && state.activePositions.length > 0) ? `
       <div class="bigAction" id="btnCreatePos">
-        РЎРѕР·РґР°С‚СЊ РЅРѕРІСѓСЋ РїРѕР·РёС†РёСЋ
+        Создать новую позицию
       </div>
     ` : "";
 
@@ -406,11 +406,11 @@ function renderPositions(){
       <div class="section">
         <div class="grid2">
           <div class="statcard">
-            <div class="k">РўРµРєСѓС‰Р°СЏ РїСЂРёР±С‹Р»СЊ</div>
+            <div class="k">Текущая прибыль</div>
             <div class="v"><span class="usdIcon">$</span> ${state.profit.toFixed(2)}</div>
           </div>
           <div class="statcard">
-            <div class="k">РђРєС‚РёРІРЅС‹Рµ РїРѕР·РёС†РёРё</div>
+            <div class="k">Активные позиции</div>
             <div class="v">
               <span class="mini">#</span> ${state.activePositions.length}
             </div>
@@ -423,8 +423,8 @@ function renderPositions(){
       <div class="section ${state.activePositions.length ? "" : "hidden"}">
         <div class="klineCard">
           <div class="klineHead">
-            <div class="klineTitle">Р”РІРёР¶РµРЅРёРµ РІРёСЂС‚СѓР°Р»СЊРЅРѕРіРѕ РґРµРїРѕР·РёС‚Р°</div>
-            <div class="seg" role="tablist" aria-label="РџРµСЂРёРѕРґ">
+            <div class="klineTitle">Движение виртуального депозита</div>
+            <div class="seg" role="tablist" aria-label="Период">
               <button class="segBtn" type="button" data-tf="12h">12h</button>
               <button class="segBtn" type="button" data-tf="1m">1m</button>
             </div>
@@ -439,7 +439,7 @@ function renderPositions(){
       </div>
 
 <div class="section ${state.activePositions.length ? "" : "hidden"}">
-        <div class="h2">РђРєС‚РёРІРЅС‹Рµ РїРѕР·РёС†РёРё</div>
+        <div class="h2">Активные позиции</div>
         <div class="posList">
           ${items}
         </div>
@@ -450,12 +450,12 @@ function renderPositions(){
 
   function renderTasks(){
     const tasks = [
-      {t:"Р•Р¶РµРґРЅРµРІРЅС‹Р№ С‡РµРє-РёРЅ", r:"+50 FXD", icon: `<svg viewBox="0 0 24 24"><path d="M12 17l-5 3 1.5-5.5L4 10l5.7-.3L12 4l2.3 5.7L20 10l-4.5 4.5L17 20z"/></svg>`, completed: false},
-      {t:"РџСЂРёРіР»Р°СЃРё 1 РґСЂСѓРіР°", r:"+1 СЃРїРёРЅ", icon: `<svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`, completed: false},
-      {t:"РћС‚РєСЂРѕР№ РїРѕР·РёС†РёСЋ", r:"+x2 Р±РѕРЅСѓСЃ", icon: `<svg viewBox="0 0 24 24"><path d="M6 6v12"/><path d="M6 9h4"/><path d="M10 9v10"/><path d="M14 5v14"/><path d="M14 11h4"/><path d="M18 11v7"/></svg>`, completed: false},
+      {t:"Ежедневный чек-ин", r:"+50 FXD", icon: `<svg viewBox="0 0 24 24"><path d="M12 17l-5 3 1.5-5.5L4 10l5.7-.3L12 4l2.3 5.7L20 10l-4.5 4.5L17 20z"/></svg>`, completed: false},
+      {t:"Пригласи 1 друга", r:"+1 спин", icon: `<svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`, completed: false},
+      {t:"Открой позицию", r:"+x2 бонус", icon: `<svg viewBox="0 0 24 24"><path d="M6 6v12"/><path d="M6 9h4"/><path d="M10 9v10"/><path d="M14 5v14"/><path d="M14 11h4"/><path d="M18 11v7"/></svg>`, completed: false},
     ];
 
-    // РџСЂРѕРІРµСЂСЏРµРј СЃРѕСЃС‚РѕСЏРЅРёРµ Р·Р°РґР°РЅРёР№ РёР· state, РµСЃР»Рё РµСЃС‚СЊ
+    // Проверяем состояние заданий из state, если есть
     if(!state.tasksCompleted) state.tasksCompleted = {};
     tasks.forEach((task, i) => {
       if(state.tasksCompleted[i]) task.completed = true;
@@ -479,7 +479,7 @@ function renderPositions(){
                 }
               </div>
             </div>
-            <button class="taskBtn" type="button" data-task="${i}">Р’С‹РїРѕР»РЅРёС‚СЊ</button>
+            <button class="taskBtn" type="button" data-task="${i}">Выполнить</button>
           </div>
         `).join("")}
       </div>
@@ -497,39 +497,44 @@ function renderPositions(){
 
       <div class="section">
         <div class="refBox">
-          <div class="k">Р РµС„РµСЂР°Р»СЊРЅР°СЏ СЃСЃС‹Р»РєР°</div>
+          <div class="k">Реферальная ссылка</div>
           <div class="refRow">
             <input id="refInput" value="${state.refLink}" readonly />
-            <div class="copybtn" id="btnCopyRef" title="РљРѕРїРёСЂРѕРІР°С‚СЊ">
+            <div class="copybtn" id="btnCopyRef" title="Копировать">
               <span class="ico" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               </span>
             </div>
           </div>
-          <div class="invite" id="btnInvite">РџСЂРёРіР»Р°СЃРёС‚СЊ РґСЂСѓР·РµР№</div>
+          <div class="invite" id="btnInvite">Пригласить друзей</div>
         </div>
 
         <div class="refLevelGrid">
           <div class="refLevelCard ${selectedLevel === 1 ? 'active' : ''}" data-level="1">
-            <div class="refLevelBadge">1 СѓСЂРѕРІРµРЅСЊ</div>
+            <div class="refLevelBadge">1 уровень</div>
             <div class="refLevelContent">
               <div class="refLevelNumber">${t.lvl1.people}</div>
             </div>
           </div>
 
           <div class="refLevelCard ${selectedLevel === 2 ? 'active' : ''}" data-level="2">
-            <div class="refLevelBadge">2 СѓСЂРѕРІРµРЅСЊ</div>
+            <div class="refLevelBadge">2 уровень</div>
             <div class="refLevelContent">
               <div class="refLevelNumber">${t.lvl2.people}</div>
             </div>
           </div>
 
           <div class="refLevelCard ${selectedLevel === 3 ? 'active' : ''}" data-level="3">
-            <div class="refLevelBadge">3 СѓСЂРѕРІРµРЅСЊ</div>
+            <div class="refLevelBadge">3 уровень</div>
             <div class="refLevelContent">
               <div class="refLevelNumber">${t.lvl3.people}</div>
             </div>
           </div>
+        </div>
+
+        <div class="refSectionHeader">
+          <div class="refSectionTitle">Рефералы ${selectedLevel} уровня</div>
+          <div class="refSectionEarned">$${totalEarned}</div>
         </div>
 
         <div class="refList">
@@ -537,9 +542,10 @@ function renderPositions(){
             <div class="refItem">
               <div class="refAvatar">${ref.avatar}</div>
               <div class="refName">${ref.name}</div>
+              <div class="refEarned">$${ref.earned.toFixed(2)}</div>
             </div>
           `).join("") : `
-            <div class="refEmpty">РќРµС‚ СЂРµС„РµСЂР°Р»РѕРІ РЅР° СЌС‚РѕРј СѓСЂРѕРІРЅРµ</div>
+            <div class="refEmpty">Нет рефералов на этом уровне</div>
           `}
         </div>
       </div>
@@ -550,7 +556,7 @@ function renderPositions(){
   function addDemoPosition(amount){
     const amt = Math.max(0, Number(amount) || 0);
     if(amt < 0.5){
-      showToast("РњРёРЅРёРјР°Р»СЊРЅС‹Р№ РґРµРїРѕР·РёС‚ 0.5");
+      showToast("Минимальный депозит 0.5");
       return;
     }
 
@@ -576,7 +582,7 @@ function renderPositions(){
     // regenerate kline so PnL feels tied to deposit size
     state.kline = genKlineSeries(Math.max(1, state.virtualDeposit), 48, (Date.now() >>> 0));
 
-    showToast("РџРѕР·РёС†РёСЏ РѕС‚РєСЂС‹С‚Р° (РґРµРјРѕ)");
+    showToast("Позиция открыта (демо)");
     render();
   }
 
@@ -587,15 +593,15 @@ function renderPositions(){
 
     const clamp = (v) => Math.max(MIN, Math.min(MAX, v));
 
-    openModal("РћС‚РєСЂС‹С‚РёРµ РїРѕР·РёС†РёРё", `
+    openModal("Открытие позиции", `
       <div class="depAmtWrap">
         <div class="depAmtInputRow">
-          <input class="depAmtInput" id="depAmtInput" inputmode="decimal" placeholder="Р’РІРµРґРёС‚Рµ СЃСѓРјРјСѓ РґРµРїРѕР·РёС‚Р°" autocomplete="off">
+          <input class="depAmtInput" id="depAmtInput" inputmode="decimal" placeholder="Введите сумму депозита" autocomplete="off">
           <div class="cur">$</div>
         </div>
-        <div class="depHint">РѕС‚ $0.5</div>
+        <div class="depHint">от $0.5</div>
 
-        <button class="depCreateBtn" type="button" id="depCreateOk">РћС‚РєСЂС‹С‚СЊ РїРѕР·РёС†РёСЋ</button>
+        <button class="depCreateBtn" type="button" id="depCreateOk">Открыть позицию</button>
       </div>
     `);
 
@@ -638,7 +644,7 @@ function renderPositions(){
     if(ok) ok.onclick = () => {
       const n = parseAmt();
       if(!Number.isFinite(n)){
-        showToast("Р’РІРµРґРёС‚Рµ СЃСѓРјРјСѓ");
+        showToast("Введите сумму");
         return;
       }
       const v = clamp(n);
@@ -674,7 +680,7 @@ if(state.tab === "tasks") html = renderTasks();
     const btnSupport = $("#btnSupport");
 const btnSettings = $("#btnSettings");
     const btnEye = $("#btnEye");
-    if(btnSupport) btnSupport.onclick = () => showToast("РџРѕРґРґРµСЂР¶РєР°: РґРµРјРѕ");
+    if(btnSupport) btnSupport.onclick = () => showToast("Поддержка: демо");
 if(btnSettings) btnSettings.onclick = () => openSettingsSheet();
     if(btnEye) btnEye.onclick = () => {
       state.hideBalance = !state.hideBalance;
@@ -696,7 +702,7 @@ if(btnSettings) btnSettings.onclick = () => openSettingsSheet();
     // task actions
     $$(".taskCard").forEach(card => {
       card.onclick = (e) => {
-        // РќРµ РїРµСЂРµРєР»СЋС‡Р°С‚СЊ, РµСЃР»Рё РєР»РёРє Р±С‹Р» РЅР° РєРЅРѕРїРєРµ
+        // Не переключать, если клик был на кнопке
         if(e.target.closest('.taskBtn')) return;
         card.classList.toggle('expanded');
       };
@@ -704,16 +710,16 @@ if(btnSettings) btnSettings.onclick = () => openSettingsSheet();
 
     $$(".taskBtn").forEach(btn => {
       btn.onclick = (e) => {
-        e.stopPropagation(); // РџСЂРµРґРѕС‚РІСЂР°С‚РёС‚СЊ РїРµСЂРµРєР»СЋС‡РµРЅРёРµ РєР°СЂС‚РѕС‡РєРё
+        e.stopPropagation(); // Предотвратить переключение карточки
         const taskIdx = parseInt(btn.dataset.task);
-        // РџРѕРјРµС‡Р°РµРј Р·Р°РґР°РЅРёРµ РєР°Рє РІС‹РїРѕР»РЅРµРЅРЅРѕРµ
+        // Помечаем задание как выполненное
         if(!state.tasksCompleted) state.tasksCompleted = {};
         state.tasksCompleted[taskIdx] = true;
-        showToast("Р—Р°РґР°РЅРёРµ РІС‹РїРѕР»РЅРµРЅРѕ (РґРµРјРѕ)");
-        // Р—Р°РєСЂС‹С‚СЊ РєР°СЂС‚РѕС‡РєСѓ РїРѕСЃР»Рµ РІС‹РїРѕР»РЅРµРЅРёСЏ
+        showToast("Задание выполнено (демо)");
+        // Закрыть карточку после выполнения
         const card = btn.closest('.taskCard');
         if(card) card.classList.remove('expanded');
-        // РџРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј Р·Р°РґР°РЅРёСЏ
+        // Перерисовываем задания
         render();
       };
     });
@@ -738,19 +744,19 @@ if(btnSettings) btnSettings.onclick = () => openSettingsSheet();
       btnCopyRef.onclick = async () => {
         try{
           await navigator.clipboard.writeText(refInput.value);
-          showToast("РЎСЃС‹Р»РєР° СЃРєРѕРїРёСЂРѕРІР°РЅР°");
+          showToast("Ссылка скопирована");
         }catch(e){
           refInput.select();
           document.execCommand("copy");
-          showToast("РЎРєРѕРїРёСЂРѕРІР°РЅРѕ (fallback)");
+          showToast("Скопировано (fallback)");
         }
       };
     }
     const btnInvite = $("#btnInvite");
-    if(btnInvite) btnInvite.onclick = () => showToast("РРЅРІР°Р№С‚: РґРµРјРѕ");
+    if(btnInvite) btnInvite.onclick = () => showToast("Инвайт: демо");
 
     const btnTake = $("#btnTake");
-    if(btnTake) btnTake.onclick = () => showToast("РќРµС‡РµРіРѕ Р·Р°Р±РёСЂР°С‚СЊ (РґРµРјРѕ)");
+    if(btnTake) btnTake.onclick = () => showToast("Нечего забирать (демо)");
 
     // chart
     const c = $("#c");
@@ -898,17 +904,17 @@ if(btnSettings) btnSettings.onclick = () => openSettingsSheet();
     };
 
     el.innerHTML = `
-      <span>РћС‚РєСЂС‹С‚СЊ <b>${fmt(open)}</b></span>
-      <span>РњР°РєСЃРёРјСѓРј <b>${fmt(high)}</b></span>
-      <span>РњРёРЅРёРјСѓРј <b>${fmt(low)}</b></span>
-      <span>Р—Р°РєСЂС‹С‚СЊ <b>${fmt(close)}</b></span>
-      <span class="${chgCls}">РР—Рњ <b>${(chgPct>0?"+":"")}${chgPct.toFixed(2)}%</b></span>
+      <span>Открыть <b>${fmt(open)}</b></span>
+      <span>Максимум <b>${fmt(high)}</b></span>
+      <span>Минимум <b>${fmt(low)}</b></span>
+      <span>Закрыть <b>${fmt(close)}</b></span>
+      <span class="${chgCls}">ИЗМ <b>${(chgPct>0?"+":"")}${chgPct.toFixed(2)}%</b></span>
     `;
 
     const closes = d.map(x => x.c);
     const ma7 = sma(closes, 7);
     const ma25 = sma(closes, 25);
-    const ma99 = sma(closes, 40); // 99 РЅР° 48 СЃРІРµС‡Р°С… РЅРµ Р¶РёРІС‘С‚, Р±РµСЂС‘Рј РґР»РёРЅРЅСѓСЋ, С‡С‚РѕР±С‹ РІС‹РіР»СЏРґРµР»Рѕ РєР°Рє Binance
+    const ma99 = sma(closes, 40); // 99 на 48 свечах не живёт, берём длинную, чтобы выглядело как Binance
     const last = (arr) => {
       for(let i=arr.length-1;i>=0;i--) if(arr[i] != null) return arr[i];
       return null;
@@ -917,9 +923,9 @@ if(btnSettings) btnSettings.onclick = () => openSettingsSheet();
     const v7 = last(ma7), v25 = last(ma25), v99 = last(ma99);
 
     maEl.innerHTML = `
-      <span class="ma7">MA(7) <b>${v7?fmt(v7):"вЂ”"}</b></span>
-      <span class="ma25">MA(25) <b>${v25?fmt(v25):"вЂ”"}</b></span>
-      <span class="ma99">MA(99) <b>${v99?fmt(v99):"вЂ”"}</b></span>
+      <span class="ma7">MA(7) <b>${v7?fmt(v7):"—"}</b></span>
+      <span class="ma25">MA(25) <b>${v25?fmt(v25):"—"}</b></span>
+      <span class="ma99">MA(99) <b>${v99?fmt(v99):"—"}</b></span>
     `;
   }
 
@@ -1282,7 +1288,7 @@ if(btnSettings) btnSettings.onclick = () => openSettingsSheet();
   }
 
   function openSettingsSheet(){
-    openModal("РќР°СЃС‚СЂРѕР№РєРё", `
+    openModal("Настройки", `
       <div class="setSection">
         <div class="setProfile">
           <div class="avatar" aria-hidden="true"></div>
@@ -1290,7 +1296,7 @@ if(btnSettings) btnSettings.onclick = () => openSettingsSheet();
             <div class="setName">${state.user.name}</div>
             <div class="setId">
               <span>ID: ${state.user.id}</span>
-              <button class="copyIdBtn" type="button" id="copyId" aria-label="РљРѕРїРёСЂРѕРІР°С‚СЊ ID">
+              <button class="copyIdBtn" type="button" id="copyId" aria-label="Копировать ID">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               </button>
             </div>
@@ -1309,8 +1315,8 @@ if(btnSettings) btnSettings.onclick = () => openSettingsSheet();
 
       <div class="setSection">
         <div class="setRow">
-          <div class="setK">РЇР·С‹Рє</div>
-          <div class="pillSeg" role="tablist" aria-label="РЇР·С‹Рє">
+          <div class="setK">Язык</div>
+          <div class="pillSeg" role="tablist" aria-label="Язык">
             <button class="pillBtn" type="button" data-lang="ru">RU</button>
             <button class="pillBtn" type="button" data-lang="en">EN</button>
           </div>
@@ -1320,8 +1326,8 @@ if(btnSettings) btnSettings.onclick = () => openSettingsSheet();
 
       <div class="setSection">
         <button class="lineBtn" type="button" id="btnGuide">
-          <span>Р“Р°Р№Рґ</span>
-          <span class="chev" aria-hidden="true">вЂє</span>
+          <span>Гайд</span>
+          <span class="chev" aria-hidden="true">›</span>
         </button>
       </div>
 
@@ -1330,7 +1336,7 @@ if(btnSettings) btnSettings.onclick = () => openSettingsSheet();
           <button class="socBtn" type="button" id="socTg" aria-label="Telegram">
             <svg viewBox="0 0 24 24"><path d="M21 5 3 12l6 2 2 6 3-4 5 4 2-15Z"/><path d="M9 14 19 7"/></svg>
           </button>
-          <button class="socBtn" type="button" id="socSup" aria-label="РџРѕРґРґРµСЂР¶РєР°">
+          <button class="socBtn" type="button" id="socSup" aria-label="Поддержка">
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg>
           </button>
           <button class="socBtn" type="button" id="socX" aria-label="X">
@@ -1352,31 +1358,31 @@ if(btnSettings) btnSettings.onclick = () => openSettingsSheet();
       copyId.onclick = async () => {
         try{
           await navigator.clipboard.writeText(state.user.id);
-          showToast("ID СЃРєРѕРїРёСЂРѕРІР°РЅ");
+          showToast("ID скопирован");
         }catch(e){
-          showToast("РљРѕРїРёСЂРѕРІР°РЅРёРµ РЅРµРґРѕСЃС‚СѓРїРЅРѕ");
+          showToast("Копирование недоступно");
         }
       };
     }
 
     const g = $("#btnGuide", sheetBody);
-    if(g) g.onclick = () => showToast("Р“Р°Р№Рґ: РґРµРјРѕ");
+    if(g) g.onclick = () => showToast("Гайд: демо");
     const o = $("#btnOnb", sheetBody);
-    if(o) o.onclick = () => showToast("РћРЅР±РѕСЂРґРёРЅРі: РґРµРјРѕ");
+    if(o) o.onclick = () => showToast("Онбординг: демо");
 
     const tg = $("#socTg", sheetBody);
-    if(tg) tg.onclick = () => showToast("Telegram: РґРµРјРѕ");
+    if(tg) tg.onclick = () => showToast("Telegram: демо");
     const sup = $("#socSup", sheetBody);
-    if(sup) sup.onclick = () => showToast("РџРѕРґРґРµСЂР¶РєР°: РґРµРјРѕ");
+    if(sup) sup.onclick = () => showToast("Поддержка: демо");
     const x = $("#socX", sheetBody);
-    if(x) x.onclick = () => showToast("X: РґРµРјРѕ");
+    if(x) x.onclick = () => showToast("X: демо");
   }
 
 function openDepositSheet(){
-    openModal("Р’С‹Р±РµСЂРё РІР°Р»СЋС‚Сѓ РґР»СЏ РїРѕРїРѕР»РЅРµРЅРёСЏ", `
+    openModal("Выбери валюту для пополнения", `
       <div class="hintCard">
         <div>
-          <div class="txt">РџРѕРґРєР»СЋС‡РµРЅРёРµ РєРѕС€РµР»СЊРєР° TON</div>
+          <div class="txt">Подключение кошелька TON</div>
         </div>
         <div class="spark" aria-hidden="true">
           <span class="ico">
@@ -1417,12 +1423,12 @@ function openDepositSheet(){
       openModal("", `
         <div class="spacer12"></div>
         <div class="depAmtInputRow">
-          <input class="depAmtInput" id="depAmtInput" inputmode="decimal" placeholder="Р’РІРµРґРёС‚Рµ СЃСѓРјРјСѓ РїРѕРїРѕР»РЅРµРЅРёСЏ" autocomplete="off">
+          <input class="depAmtInput" id="depAmtInput" inputmode="decimal" placeholder="Введите сумму пополнения" autocomplete="off">
           <div class="coinBadge">TON</div>
         </div>
 
         <div class="spacer12"></div>
-        <div class="primaryAction" id="depositBtn">РџРѕРїРѕР»РЅРёС‚СЊ</div>
+        <div class="primaryAction" id="depositBtn">Пополнить</div>
       `);
 
       if(sheetTitle){
@@ -1430,7 +1436,7 @@ function openDepositSheet(){
           <div class="ico" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           </div>
-          РќР°Р·Р°Рґ
+          Назад
         </div>`;
         $("#depBack").onclick = () => openDepositSheet();
       }
@@ -1448,10 +1454,10 @@ function openDepositSheet(){
         const cleaned = raw.replace(/[^\d.]/g,"");
         const num = Number(cleaned);
         if(!Number.isFinite(num) || num <= 0){
-          showToast("Р’РІРµРґРёС‚Рµ СЃСѓРјРјСѓ");
+          showToast("Введите сумму");
           return;
         }
-        showToast("РџРѕРїРѕР»РЅРµРЅРёРµ TON (РґРµРјРѕ)");
+        showToast("Пополнение TON (демо)");
         closeModal();
       };
       return;
@@ -1461,18 +1467,18 @@ function openDepositSheet(){
       openModal("", `
         <div class="spacer12"></div>
         <div class="depAmtInputRow">
-          <input class="depAmtInput" id="starsAmtInput" inputmode="decimal" placeholder="Р’РІРµРґРёС‚Рµ СЃСѓРјРјСѓ РїРѕРїРѕР»РЅРµРЅРёСЏ" autocomplete="off">
+          <input class="depAmtInput" id="starsAmtInput" inputmode="decimal" placeholder="Введите сумму пополнения" autocomplete="off">
           <div class="coinBadge">Stars</div>
         </div>
 
         <div class="spacer12"></div>
         <div class="depLine">
-          <div class="k">РџРѕР»СѓС‡РёС‚Рµ</div>
+          <div class="k">Получите</div>
           <div class="v" id="starsTonAmount">0 TON</div>
         </div>
 
         <div class="spacer12"></div>
-        <div class="primaryAction" id="starsPay">РџРѕРїРѕР»РЅРёС‚СЊ</div>
+        <div class="primaryAction" id="starsPay">Пополнить</div>
       `);
 
       if(sheetTitle){
@@ -1480,7 +1486,7 @@ function openDepositSheet(){
           <div class="ico" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           </div>
-          РќР°Р·Р°Рґ
+          Назад
         </div>`;
         $("#depBack").onclick = () => openDepositSheet();
       }
@@ -1515,11 +1521,11 @@ function openDepositSheet(){
         const cleaned = raw.replace(/[^\d.]/g,"");
         const num = Number(cleaned);
         if(!Number.isFinite(num) || num <= 0){
-          showToast("Р’РІРµРґРёС‚Рµ СЃСѓРјРјСѓ");
+          showToast("Введите сумму");
           return;
         }
         const ton = num * state.deposit.starsToTonRate;
-        showToast(`РџРѕРїРѕР»РЅРµРЅРёРµ ${num} Stars (${ton.toFixed(4)} TON) - РґРµРјРѕ`);
+        showToast(`Пополнение ${num} Stars (${ton.toFixed(4)} TON) - демо`);
         closeModal();
       };
       return;
@@ -1530,12 +1536,12 @@ function openDepositSheet(){
   }
 
   function openWithdrawSheet(){
-    openModal("Р’С‹РІРѕРґ СЃСЂРµРґСЃС‚РІ", `
+    openModal("Вывод средств", `
       <div class="depLine">
-        <div class="k">Р”РѕСЃС‚СѓРїРЅРѕ</div>
+        <div class="k">Доступно</div>
         <div class="v">${fmtMoney(state.balanceUsd)}</div>
       </div>
-      <div class="primaryAction" id="wdOk">Р’С‹РІРѕРґ</div>
+      <div class="primaryAction" id="wdOk">Вывод</div>
     `);
     $("#wdOk").onclick = closeModal;
   }
@@ -1566,11 +1572,11 @@ function openDepositSheet(){
     const candles = [];
     let currentX = 15;
     for(let i = 0; i < candleCount; i++){
-      // Р Р°Р·РЅР°СЏ С€РёСЂРёРЅР° СЃРІРµС‡РµР№ РѕС‚ 12 РґРѕ 20 РїРёРєСЃРµР»РµР№ (РјРµРЅСЊС€РёР№ СЂР°Р·Р±СЂРѕСЃ)
+      // Разная ширина свечей от 12 до 20 пикселей (меньший разброс)
       const candleWidth = 12 + Math.random() * 8;
       const basePrice = baseY + (Math.random() - 0.5) * 50;
       
-      // Р Р°Р·РЅС‹Рµ СЂР°Р·РјРµСЂС‹ С‚РµР» СЃРІРµС‡РµР№ (РѕС‚ 8 РґРѕ 30 РїРёРєСЃРµР»РµР№)
+      // Разные размеры тел свечей (от 8 до 30 пикселей)
       const bodySize = 8 + Math.random() * 22;
       const isUp = Math.random() > 0.5;
       const open = basePrice + (isUp ? -bodySize/2 : bodySize/2);
@@ -1585,10 +1591,10 @@ function openDepositSheet(){
         high: basePrice - (15 + Math.random() * 25),
         low: basePrice + (15 + Math.random() * 25),
         isUp: isUp,
-        speed: 0.2 + Math.random() * 0.2, // Р‘РѕР»РµРµ СЃР±Р°Р»Р°РЅСЃРёСЂРѕРІР°РЅРЅР°СЏ СЃРєРѕСЂРѕСЃС‚СЊ
-        phase: (i * 0.3) + Math.random() * 0.5, // Р‘РѕР»РµРµ СѓРїРѕСЂСЏРґРѕС‡РµРЅРЅС‹Рµ С„Р°Р·С‹
-        priceTrend: (Math.random() - 0.5) * 0.15, // РњРµРЅСЊС€РёР№ С‚СЂРµРЅРґ
-        volatility: 0.5 + Math.random() * 0.3 // РњРµРЅСЊС€Р°СЏ РІРѕР»Р°С‚РёР»СЊРЅРѕСЃС‚СЊ
+        speed: 0.2 + Math.random() * 0.2, // Более сбалансированная скорость
+        phase: (i * 0.3) + Math.random() * 0.5, // Более упорядоченные фазы
+        priceTrend: (Math.random() - 0.5) * 0.15, // Меньший тренд
+        volatility: 0.5 + Math.random() * 0.3 // Меньшая волатильность
       });
       
       currentX += candleWidth + (8 + Math.random() * 6);
@@ -1598,7 +1604,7 @@ function openDepositSheet(){
     let progress = 0;
     
     function drawCandle(candle, t){
-      // Р‘РѕР»РµРµ СЃР±Р°Р»Р°РЅСЃРёСЂРѕРІР°РЅРЅРѕРµ РґРІРёР¶РµРЅРёРµ С†РµРЅС‹
+      // Более сбалансированное движение цены
       const priceMovement = Math.sin(t * candle.speed + candle.phase) * candle.volatility * 15;
       const trend = candle.priceTrend * t * 8;
       
@@ -1606,7 +1612,7 @@ function openDepositSheet(){
       const currentOpen = currentPrice + (candle.open - candle.basePrice);
       const currentClose = currentPrice + (candle.close - candle.basePrice);
       
-      // Р‘РѕР»РµРµ СЃС‚Р°Р±РёР»СЊРЅС‹Рµ high/low
+      // Более стабильные high/low
       const vol = 0.8 + Math.abs(Math.sin(t * candle.speed * 1.2 + candle.phase)) * 0.2;
       const currentHigh = currentPrice - (candle.basePrice - candle.high) * vol;
       const currentLow = currentPrice + (candle.low - candle.basePrice) * vol;
@@ -1624,7 +1630,7 @@ function openDepositSheet(){
       ctx.lineTo(candle.x, currentLow);
       ctx.stroke();
       
-      // Body - РёСЃРїРѕР»СЊР·СѓРµРј СЂРµР°Р»СЊРЅСѓСЋ С€РёСЂРёРЅСѓ СЃРІРµС‡Рё
+      // Body - используем реальную ширину свечи
       ctx.fillStyle = isUp ? '#0ECB81' : '#F6465D';
       ctx.fillRect(candle.x - candle.width/2, bodyTop, candle.width, bodyHeight);
       
@@ -1677,5 +1683,4 @@ function openDepositSheet(){
     setTimeout(() => updateNavIndicator(), 100);
   }, 2500);
 })();
-
 
