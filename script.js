@@ -258,6 +258,7 @@ function calcPnlToday(){
     if(tab === "positions"){
       ensureKlineTimer();
       ensurePositionTimer();
+      ensurePositionTimer();
     } else {
       stopKlineTimer();
       stopPositionTimer();
@@ -859,6 +860,7 @@ if(btnSettings) btnSettings.onclick = () => openSettingsSheet();
       drawKline(k, state.kline);
       updatePnlDom();
       ensureKlineTimer();
+      ensurePositionTimer();
     }else{
       stopKlineTimer();
       if(m) drawMonthlyBars(m, state.monthPerf);
