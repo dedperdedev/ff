@@ -1406,7 +1406,7 @@ function openDepositSheet(){
 
   function coinBtn(sym, name){
     const logo = sym === "TON" 
-      ? `<img src="https://ton.org/download/ton_symbol.svg" alt="TON" style="width:100%;height:100%;object-fit:contain;" />`
+      ? tonLogoSVG(34)
       : sym;
     return `
       <div class="coinBtn" data-coin="${sym}">
