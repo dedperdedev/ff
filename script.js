@@ -244,6 +244,7 @@ function calcPnlToday(){
   const toast = $("#toast");
 
   let klineTimer = null;
+  let positionTimer = null;
 
   function showToast(msg){
     toast.textContent = msg;
@@ -254,9 +255,29 @@ function calcPnlToday(){
 
   function setTab(tab){
     state.tab = tab;
-    if(tab === "positions") ensureKlineTimer();
-    else stopKlineTimer();
+    if(tab === "positions"){
+      ensureKlineTimer();
+      ensurePositionTimer();
+    } else {
+      stopKlineTimer();
+      stopPositionTimer();
+    }
     render();
+  }
+
+  function ensurePositionTimer(){
+    if(positionTimer) return;
+    positionTimer = setInterval(() => {
+      if(state.tab === "positions" && state.activePositions.length > 0){
+        render();
+      }
+    }, 1000);
+  }
+
+  function stopPositionTimer(){
+    if(!positionTimer) return;
+    clearInterval(positionTimer);
+    positionTimer = null;
   }
 
 
